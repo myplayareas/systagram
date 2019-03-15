@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>br.ufc.great.sysadmin</groupId>
-	<artifactId>sysadmin</artifactId>
-	<version>v1.2.0</version>
+	<artifactId>systagram</artifactId>
+	<version>v1.0.0</version>
 	<packaging>jar</packaging>
 
-	<name>SysAdmin</name>
-	<description>Aplicação de Manipulação do Banco da Aplicação SysAdmin</description>
+	<name>SysTagram</name>
+	<description>Aplicação de Postagem de Fotos e comentários</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
