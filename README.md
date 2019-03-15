@@ -1,5 +1,5 @@
-# SysWeb
-Aplicação web exemplo 
+# SysTagram
+Aplicação para postar fotos e receber comentários. 
 
 Features
 ---
