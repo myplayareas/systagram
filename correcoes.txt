@@ -1,0 +1,20 @@
+1. Erro ao remover usuário
+a) remover a lista de permissoes do usuario. OK
+
+2. Melhorar o controle de sessão do usuário
+Revisar sugestões em https://www.baeldung.com/spring-security-session
+
+3. Ao logar pela primeira vez mostra a tela 404 de invalidSession
+java.lang.NullPointerException: null
+	at br.ufc.great.sysadmin.util.MySessionInfo.getCurrentUser(MySessionInfo.java:33) ~[classes/:na]
+	
+Mostra que está retornando User null
+
+Obs: este erro não acontece na janela privada
+- mas ao fazer o logout o erro volta, ou seja, depois do logout ao tentar fazer novo login mostra a tela 404 de invalidSession
+
+Possível solução: criar uma nova sessão ao fazer o login
+
+4. Melhorar o formulário de cadastro de nova permissão (Incompleto)
+
+5. Melhorar o formulário de permissão de usuário (Incompleto)
