@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -33,8 +34,8 @@ public class Users extends AbstractModel<Long> implements UserDetails{
 	private String email;		
 	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Role> roles = new LinkedList<Role>();
-	@OneToOne
-	private Person person = new Person();
+	@OneToOne(cascade=CascadeType.ALL)
+	private Person person;
 	
 	public Users() {
 	}

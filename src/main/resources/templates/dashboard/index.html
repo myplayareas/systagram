@@ -6,8 +6,15 @@
 <title>Dashboard</title>
 </head>
 <body>
-	<div layout:fragment="content">
+<section layout:fragment="header">
+<h1>Dashboard</h1>
+<ol class="breadcrumb">
+    <li><a href="/"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+    <li class="active">Dashboard</li>
+</ol>
+</section>
 
+	<div layout:fragment="content">
 		<div class="box box-default">
 			<div class="box-header with-border">
 				<h3 class="box-title">Pesquisa</h3>

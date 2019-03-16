@@ -123,7 +123,7 @@ public class AccessControlController {
 			userEdited.setRoles(roles);
 			break;
 		default:
-			ra.addFlashAttribute("successFlash", "A permissão não está registrada no sistema!");
+			ra.addFlashAttribute("errorFlash", "A permissão não está registrada no sistema!");
 			break;
 		}
     	
