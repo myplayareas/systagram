@@ -108,43 +108,40 @@
 									</form>
 								</div>
 
-								<div class="tab-pane" id="personData">
-									<form class="form-horizontal" data-toggle="validator"
-										role="form" th:object="${user}"
-										th:action="@{/users/saveedited}" method="post">
+              <div class="tab-pane" id="personData">
+                <form class="form-horizontal" role="form" th:object="${person}" th:action="@{/users/personsaveedited}" method="post">
 
-										<div class="box-body">
+	 				<div class="box-body">
 
-											<input type="hidden" th:field="*{id}" />
-											<div class="form-group">
-												<label for="Person">Nome</label> <input type="text"
-													required="true" class="form-control"
-													th:field="*{person.name}" id="name" />
-											</div>
-											<div class="form-group">
-												<label for="Person">Endereço</label> <input type="text"
-													class="form-control" th:field="*{person.address}"
-													name="address" id="address" />
-											</div>
-											<div class="form-group">
-												<label for="Person">Cidade</label> <input type="text"
-													class="form-control" th:field="*{person.city}" id="city" />
-											</div>
-											<div class="form-group">
-												<label for="Person">Estado</label> <input type="text"
-													class="form-control" th:field="*{person.state}" id="state" />
-											</div>
-											<div class="form-group">
-												<label for="Person">CEP</label> <input type="text"
-													class="form-control" th:field="*{person.cep}" id="cep" />
-											</div>
+	                <input type="hidden" th:field="*{id}" name="id" id="id"/>
+	                <input type="hidden" th:field="*{user}" name="user" id="user"/>	
+	                <div class="form-group">
+	                    <label for="Person">Nome</label>
+	                    <input type="text" required="true" class="form-control" th:field="*{name}" name="name" id="name"/>
+	                </div>
+	                <div class="form-group">
+	                    <label for="Person">Endereço</label>
+	                    <input type="text" class="form-control" th:field="*{address}" name="address" id="address" />
+	                </div>                
+	                <div class="form-group">
+	                	<label for="Person">Cidade</label>
+	                	<input type="text" class="form-control" th:field="*{city}" name="city" id="city" />
+	                </div>
+	                <div class="form-group">
+	                	<label for="Person">Estado</label>
+	                	<input type="text" class="form-control" th:field="*{state}" name="state" id="state" />
+	                </div>
+	                <div class="form-group">
+	                	<label for="Person">CEP</label>
+	                	<input type="text" class="form-control" th:field="*{cep}" name="cep" id="cep" />
+	                </div>	            	
+	            	</div>
+	            	<div class="box-footer">
+	                	<button type="submit" class="btn btn-primary">Salvar</button>
+		            </div>
+                </form>
+              </div>
 
-										</div>
-										<div class="box-footer">
-											<button type="submit" class="btn btn-primary">Salvar</button>
-										</div>
-									</form>
-								</div>
 
 								<!-- /.tab-pane -->
 							</div>

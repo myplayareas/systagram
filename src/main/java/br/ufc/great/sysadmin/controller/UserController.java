@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import br.ufc.great.sysadmin.model.Person;
 import br.ufc.great.sysadmin.model.Role;
 import br.ufc.great.sysadmin.model.Users;
 import br.ufc.great.sysadmin.service.AuthoritiesService;
+import br.ufc.great.sysadmin.service.PersonService;
 import br.ufc.great.sysadmin.service.UsersService;
 import br.ufc.great.sysadmin.util.GeradorSenha;
 import br.ufc.great.sysadmin.util.MySessionInfo;
@@ -30,6 +32,7 @@ public class UserController {
 	private UsersService userService;
 	private Users loginUser;
 	private AuthoritiesService authoritiesService;
+	private PersonService personService;
 	
 	@Autowired
 	private MySessionInfo mySessionInfo;
@@ -42,6 +45,11 @@ public class UserController {
 	@Autowired
 	public void setAuthoritiesService(AuthoritiesService authoritiesService) {
 		this.authoritiesService = authoritiesService;
+	}
+	
+	@Autowired
+	public void setPersonService(PersonService personService) {
+		this.personService = personService;
 	}
 	
 	/*
@@ -122,9 +130,11 @@ public class UserController {
     @RequestMapping("/users/edit/{id}")
     public String edit(@PathVariable Long id, Model model) {
 		Users editUser = userService.get(id);
+		Person person = editUser.getPerson();
 		checkUser();
 		
         model.addAttribute("user", editUser);
+		model.addAttribute("person", person);
         model.addAttribute("loginusername", loginUser.getUsername());
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
@@ -142,8 +152,10 @@ public class UserController {
     public String editProfile(@PathVariable Long id, Model model) {
     	checkUser();
 		Users user = this.userService.get(loginUser.getId());
+		Person person = user.getPerson();
 
         model.addAttribute("user", loginUser);
+        model.addAttribute("person", person);
         model.addAttribute("loginusername", loginUser.getUsername());
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());    	
@@ -175,17 +187,22 @@ public class UserController {
 			user.setRoles(roles);
 			break;
 		default:
-			ra.addFlashAttribute("successFlash", "A permissão não está registrada no sistema!");
+			ra.addFlashAttribute("errorFlash", "A permissão não está registrada no sistema!");
 			break;
 		}
     	
     	if (password.equals(confirmPassword)){
         	senhaCriptografada = new GeradorSenha().criptografa(password);
         	user.setPassword(senhaCriptografada);
+        	//Criar uma pessoa vazia e associa ao novo usuário
+        	Person person = new Person();
+        	person.setUser(user);
+        	
+        	user.setPerson(person);
             Users save = userService.save(user);
             ra.addFlashAttribute("successFlash", "Usuário foi salvo com sucesso.");
     	}else{
-            ra.addFlashAttribute("successFlash", "A senha do usuário NÃO confere.");
+            ra.addFlashAttribute("errorFlash", "A senha do usuário NÃO confere.");
     	}    	
     	return "redirect:/users";
     }
@@ -205,13 +222,14 @@ public class UserController {
     		@RequestParam("confirmnewpassword") String confirmNewPassword, 
     		final RedirectAttributes ra) {
     	
-    	String recuperaPasswordBanco;
     	Users userOriginal = userService.get(user.getId());
-    	recuperaPasswordBanco = userOriginal.getPassword();
-    	
-    	List<Role> roles = userOriginal.getRoles();		
+    	String recuperaPasswordBanco = userOriginal.getPassword();
+    	Person personOriginal = userOriginal.getPerson();
+    	List<Role> roles = userOriginal.getRoles();	
+    	String local="";
 		     	    	
     	user.setRoles(roles);
+    	user.setPerson(personOriginal);
     	
     	if (newPassword.equals(confirmNewPassword)){
         	if (new GeradorSenha().comparaSenhas(originalPassword, recuperaPasswordBanco)){
@@ -220,14 +238,54 @@ public class UserController {
                 Users save = userService.save(user);
                 ra.addFlashAttribute("successFlash", "Usuário " + user.getUsername() + " foi alterado com sucesso.");  		
         	}else{
-        		ra.addFlashAttribute("successFlash", "A senha informada é diferente da senha original.");
+        		ra.addFlashAttribute("errorFlash", "A senha informada é diferente da senha original.");
         	}
     	}
     	else{
-            ra.addFlashAttribute("successFlash", "A nova senha não foi confirmada.");
+            ra.addFlashAttribute("errorFlash", "A nova senha não foi confirmada.");
     	}
-    	return "redirect:/";
+    	
+    	if (this.mySessionInfo.getAcesso().equals("ADMIN")) {
+    		local = "/users";
+    	}else {
+    		local = "/";
+    	}
+    	
+    	return "redirect:"+local;
     }
+
+    /**
+     * Salva as alterações do usuário editado
+     * @param user novos dados do usuário
+     * @param originalPassword senha original registrada no banco
+     * @param newPassword nova senha passada pelo usuário
+     * @param confirmnewpassword compara se é igual a newPassword
+     * @param ra redireciona os atributos
+     * @return página que lista todos os usuários
+     */
+    /*
+    @RequestMapping(value = "/users/personsaveedited", method = RequestMethod.POST)
+    public String savePersonEdited(@RequestParam("id") long id, @RequestParam("name") String name, @RequestParam("address") String address,   
+    		@RequestParam("city") String city, @RequestParam("state") String state, 
+    		@RequestParam("cep") String cep,  
+    		final RedirectAttributes ra) {
+    */
+    @RequestMapping(value = "/users/personsaveedited", method = RequestMethod.POST)
+    public String savePersonEdited(Person person, final RedirectAttributes ra) {
+    	String local="";
+    	
+    	Person save = this.personService.save(person);
+		ra.addFlashAttribute("successFlash", "Os dados pessoais do " + person.getUser().getUsername() + " foram alterados com sucesso.");
+    	
+		if (this.mySessionInfo.getAcesso().equals("ADMIN")) {
+    		local = "/users";
+    	}else {
+    		local = "/";
+    	}
+    	
+    	return "redirect:"+local;
+    }
+
     
     /**
      * TODO: Checar as dependencias de usuario. Usuario tem lista de permissoes e usuario tem lista de amigos.
@@ -240,9 +298,11 @@ public class UserController {
     	String mensagem = "";    	
     	String nome="";
     	Users userToDelete = this.userService.get(id);
-    	
+    	    	
+    	this.userService.delete(id);
     	nome = userToDelete.getUsername();
     	mensagem =  "Usuário " + nome + " removido com sucesso!";
+
     	
     	ra.addFlashAttribute("successFlash", mensagem);
         return "redirect:/users";
@@ -320,6 +380,8 @@ public class UserController {
 			  	user.setPassword(senhaCriptografada);
 				user.setEnabled(true);				
 				Role authorities = new Role();	
+				Person person = new Person();
+				person.setUser(user);
 				
 				//checa o tipo do usuário
 				if (authority.equals("USER")) {				
@@ -327,6 +389,7 @@ public class UserController {
 					List<Role> roles = new LinkedList<>();
 					roles.add(authorities);
 					user.setRoles(roles);
+					user.setPerson(person);
 					this.userService.save(user);
 					model.addAttribute("msg", "Usuário comum registrado com sucesso!");
 					return "/login";				
