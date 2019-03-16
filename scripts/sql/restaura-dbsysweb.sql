@@ -59,7 +59,7 @@ CREATE TABLE `person` (
   PRIMARY KEY (`id`),
   KEY `FKemsnreyk6g37uoja1ngeog5sp` (`user_id`),
   CONSTRAINT `FKemsnreyk6g37uoja1ngeog5sp` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,7 +68,7 @@ CREATE TABLE `person` (
 
 LOCK TABLES `person` WRITE;
 /*!40000 ALTER TABLE `person` DISABLE KEYS */;
-INSERT INTO `person` VALUES (1,'Teste','teste','tesTe',0,0,'Armando Soares','PI',1),(2,'Teste','teste','tesTe',0,0,'Maria','PI',2),(3,'Teste','teste','tesTe',0,0,'Francisco','PI',3),(4,'Teste','teste','tesTe',0,0,'Joao','PI',4),(5,'Teste','teste','tesTe',0,0,'Carlos','PI',8),(6,'Teste','teste','tesTe',0,0,'Capitulina','PI',16),(7,'Teste','teste','tesTe',0,0,'Foca','PI',17);
+INSERT INTO `person` VALUES (1,'Rua Território Fernando de Noronha 2112','64007250','Teresina',0,0,'Armando Soares Sousa','PI',1),(2,'Rua Júlio Cesar','60000000','Fortaleza',0,0,'Maria Joaquina de Amaral Pereira Goes','CE',2),(14,'Rua João Cabral','64000000','Teresina',0,0,'Teste da Silva','PI',32);
 /*!40000 ALTER TABLE `person` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -95,7 +95,6 @@ CREATE TABLE `person_notes` (
 
 LOCK TABLES `person_notes` WRITE;
 /*!40000 ALTER TABLE `person_notes` DISABLE KEYS */;
-INSERT INTO `person_notes` VALUES (1,1);
 /*!40000 ALTER TABLE `person_notes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -141,7 +140,7 @@ CREATE TABLE `users` (
   KEY `id` (`id`),
   KEY `FKd21kkcigxa21xuby5i3va9ncs` (`person_id`),
   CONSTRAINT `FKd21kkcigxa21xuby5i3va9ncs` FOREIGN KEY (`person_id`) REFERENCES `person` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -150,7 +149,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('ana','$2a$10$xEyUW9wNFDWcjdvo4orYgeWYWIEUTR0KweCM7jXbfytEDwsuMXyTK',1,15,'ana@gmail.com',NULL),('armando','$2a$10$G21Awy3udH2acuuY3IqTPeJRT5QnuUGCVMydgLLZbjLMjFVJa9O12',1,1,'armando@ufpi.edu.br',1),('brenda','$2a$10$XGgI46HrmD8X4Du.vi2oKeh/8ZFDdrLuK8g9gBjReyfight3RoIBK',1,21,'brenda@gmail.com',NULL),('capitu','$2a$10$oEaZHj67GPXkR/khMmdgjeMITD7L8dz80IDPtjzKK6kwT2rt2cbGW',1,16,'capitu@gmail.com',NULL),('carlos','$2a$10$ZxkTB./ZdO92fVoGRkwY4OUEk6uxUTnfB/iRSg1iqzBemMARGVpnu',1,8,'carlos@gmail.com',NULL),('foca','$2a$10$3gJxHPj.g5gp2jIz.UhpQup4sc8jE2voGs5M3aj1SzDRcvWX5pneq',1,17,'foca@gmail.cofm',NULL),('Francisco','$2a$10$vKnTJGs54wwOlDXB6QsAxOO3RxK.OSSq8uJLZKjxJ7kd7lg.jhVG2',1,3,'francisco@uol.com.br',3),('joao','$2a$10$hRJ0e4Ix3O4GKvryi3h3.urzxFwvOvuxlsbLKKJKPCrx8VJfqeNSO',1,4,'joao@gmail.com',4),('jose','$2a$10$eDKIyxHjiQfQqrjKO9MWnu8spMCmanXWneP72ypm0ShnmxasLfNgO',1,14,'jn@gma.com',NULL),('josesilva','$2a$10$4rvNGVW4ExPT/NEO//U2BeI4UWRKnsUwN0E5MeQR5qXPBCnl54Y3a',1,18,'jose@gmail.com',NULL),('jota','$2a$10$JNwqetWQWIINWs6QWr0bm.Qe/XTIUNeK2pvYVZdiOc18cAZFzBVv2',1,11,'jotaq@gm.com',NULL),('maria','$2a$10$e2lpDJNq6FTovXESm/2vfuGKFItZuSanv.VikJ/N16Y8aPR010IgO',1,2,'maria@gmail.com',2),('tes','$2a$10$TdQU8ETpFfYdEUDKxx/TmOkbSwPXGwVP2kon1e74b8ieqCy3qjbDW',1,13,'tersaliaamaral@gmail.com',NULL),('teste','$2a$10$fE60f6LN5pt.Kz8Avv9/g.I.OrRhh1N8UdfGe.DzN8eRoZSml/Swe',1,24,'teste@gmail.com',NULL),('teste2','$2a$10$XaNeT7uE5Juk23aUYqy/7.QMzHtO/bFhKheQBTE4ANQXwww75Rv7.',1,23,'teste2@gmail.com',NULL),('tica','$2a$10$1A7DQ.MoAnGmt9wNhb/o7.BWdMPVlpiGw6Y4/kPPfNDo1F8IjCi26',1,20,'tica@gmail.com',NULL),('vera','$2a$10$U3BspMHOLefjDFzGmyIYo.Woti72slfkPxEsm57V/HxmHDfTbGpsi',1,9,'vera@gmail.com',NULL);
+INSERT INTO `users` VALUES ('armando','$2a$10$bkmVrasmzmeK4Uq/uashx..pta97Koxhi41..rbami8RSjVDJ/zNO',1,1,'armando@ufpi.edu.br',1),('maria','$2a$10$QDZqbS8KUkaLACXFrZUpqOtDFc/wMBqC.ZaEu.XgvagmOLAfDUhoq',1,2,'maria@gmail.com',2),('teste','$2a$10$ZyxSDSaC6/Day151.iyym.Tvjl3ONt2//5yYun3cydxZM7XmVlfTy',1,32,'teste',14);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -177,7 +176,7 @@ CREATE TABLE `users_roles` (
 
 LOCK TABLES `users_roles` WRITE;
 /*!40000 ALTER TABLE `users_roles` DISABLE KEYS */;
-INSERT INTO `users_roles` VALUES (1,1),(1,2),(2,2),(4,2),(9,2),(11,2),(13,2),(18,2),(20,2),(21,2),(23,2),(8,2),(14,2),(3,2),(16,2),(24,2),(15,2);
+INSERT INTO `users_roles` VALUES (1,1),(1,2),(2,2),(32,2);
 /*!40000 ALTER TABLE `users_roles` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -190,4 +189,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-03-15 19:06:17
+-- Dump completed on 2019-03-16 17:51:31

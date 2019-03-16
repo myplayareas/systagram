@@ -380,6 +380,8 @@ public class UserController {
 			  	user.setPassword(senhaCriptografada);
 				user.setEnabled(true);				
 				Role authorities = new Role();	
+				Person person = new Person();
+				person.setUser(user);
 				
 				//checa o tipo do usuário
 				if (authority.equals("USER")) {				
@@ -387,6 +389,7 @@ public class UserController {
 					List<Role> roles = new LinkedList<>();
 					roles.add(authorities);
 					user.setRoles(roles);
+					user.setPerson(person);
 					this.userService.save(user);
 					model.addAttribute("msg", "Usuário comum registrado com sucesso!");
 					return "/login";				
