@@ -60,12 +60,39 @@
 				</div>
 				<!-- /.info-box -->
 			</div>
+			
+			<div class="col-md-3 col-sm-6 col-xs-12">
+				<div class="info-box">
+					<!-- Apply any bg-* class to to the icon to color it -->
+					<span class="info-box-icon bg-green"><i class="fa fa-file-image-o"></i></span>
+					<div class="info-box-content">
+						<span class="info-box-text">Minhas Fotos</span> <span
+							class="info-box-number">4</span>
+					</div>
+					<!-- /.info-box-content -->
+				</div>
+				<!-- /.info-box -->
+			</div>
+			
+			<div class="col-md-3 col-sm-6 col-xs-12">
+				<div class="info-box">
+					<!-- Apply any bg-* class to to the icon to color it -->
+					<span class="info-box-icon bg-purple"><i class="fa fa-comments-o"></i></span>
+					<div class="info-box-content">
+						<span class="info-box-text">Meus comentários</span> <span
+							class="info-box-number">3</span>
+					</div>
+					<!-- /.info-box-content -->
+				</div>
+				<!-- /.info-box -->
+			</div>
+			
 
 		</div>
 		
 		<div class="row">
 		<!-- Lista com as fotos comentadas -->		
-		<div class="col-md-6">
+		<div class="col-md-8">
           <!-- Box Comment -->
           <div class="box box-widget">
             <div class="box-header with-border">
@@ -141,8 +168,103 @@
           <!-- /.box -->
         </div>
 		<!-- Final da Lista com as fotos comentadas -->
-		</div>
 
+		<!-- Lista dos usuários -->
+			<div class="col-md-4">
+              <!-- USERS LIST -->
+              <div class="box box-danger">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Usuários</h3>
+
+                  <div class="box-tools pull-right">
+                    <span class="label label-danger" th:text="${totalUsers}">Usuários</span>
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+                    </button>
+                  </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body no-padding" style="">
+                  <ul class="users-list clearfix">
+						<li th:each="user : ${listUsers}">
+							<input id="id" name="id" th:value="${user.id}" type="hidden" /> 
+							<img alt="Image" th:src="${'/upload/image/users/'+user.id}" width="128" height="128" /> 
+							<a class="users-list-name" href="#"><spam th:text="${user.username}"></spam></a>
+						</li>
+				  </ul>
+                  <!-- /.users-list -->
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer text-center" style="">
+                  <a href="javascript:void(0)" class="uppercase">Visualizar todos os usuários</a>
+                </div>
+                <!-- /.box-footer -->
+              </div>
+              <!-- Fina da lista dos usuários -->
+              <!--/.box -->
+                        
+		      <!-- Inicio da lista de imagens -->
+		    <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">Fotos do Usuário</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body" style="">
+              <ul class="products-list product-list-in-box">
+                <li class="item">
+                  <div class="product-img">
+                    <img src="../dist/img/default-50x50.gif" alt="Product Image" />
+                  </div>
+                  <div class="product-info">
+                    <a href="javascript:void(0)" class="product-title">Samsung TV</a>
+                    <span class="product-description">
+                          Samsung 32" 1080p 60Hz LED Smart HDTV.
+                        </span>
+                  </div>
+                </li>
+                <!-- /.item -->
+                <li class="item">
+                  <div class="product-img">
+                    <img src="../dist/img/default-50x50.gif" alt="Product Image" />
+                  </div>
+                  <div class="product-info">
+                    <a href="javascript:void(0)" class="product-title">Bicycle</a>
+                    <span class="product-description">
+                          26" Mongoose Dolomite Men's 7-speed, Navy Blue.
+                        </span>
+                  </div>
+                </li>
+                <!-- /.item -->
+                <li class="item">
+                  <div class="product-img">
+                    <img src="../dist/img/default-50x50.gif" alt="Product Image" />
+                  </div>
+                  <div class="product-info">
+                    <a href="javascript:void(0)" class="product-title">Xbox One </a>
+                    <span class="product-description">
+                          Xbox One Console Bundle with Halo Master Chief Collection.
+                        </span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer text-center" style="">
+              <a href="javascript:void(0)" class="uppercase">Visualiar todas as fotos</a>
+            </div>
+            <!-- /.box-footer -->
+      		</div>
+		      <!-- Final da lista de imagens -->
+		      
+		     </div>
+		</div>
 	</div>
 
 </body>

@@ -1,6 +1,7 @@
 package br.ufc.great.sysadmin.controller;
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -71,8 +72,11 @@ public class DashboardController {
     	Users loginUser = userService.getUserByUserName(mySessionInfo.getCurrentUser().getUsername());
     	
     	acesso = mySessionInfo.getAcesso();
+    	
+    	List<Users> listUsers = this.userService.getAll();
     	    	
     	model.addAttribute("totalUsers", totalUsers);
+    	model.addAttribute("listUsers", listUsers);
     	model.addAttribute("loginusername", loginUser.getUsername());
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
