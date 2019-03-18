@@ -18,9 +18,11 @@
 				<li><a href="/users"><i class="fa fa-circle-o"></i>Usuários</a></li>
 			</ul>
 			<ul class="treeview-menu">
-				<li><a href="/person/comment"><i class="fa fa-circle-o"></i>Comentários</a></li>
+				<li><a th:href="${'/person/' + loginuserid + '/comment'}"><i class="fa fa-circle-o"></i>Comentários</a></li>
 			</ul>
-			
+			<ul class="treeview-menu">
+				<li><a th:href="${'/upload/person/' + loginuserid + '/picture'}"><i class="fa fa-circle-o"></i>Fotos</a></li>
+			</ul>
 		</li>
 		
         <li class="treeview">
