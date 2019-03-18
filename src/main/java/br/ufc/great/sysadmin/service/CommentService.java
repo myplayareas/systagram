@@ -1,0 +1,37 @@
+package br.ufc.great.sysadmin.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Service;
+
+import br.ufc.great.sysadmin.model.Comment;
+import br.ufc.great.sysadmin.model.Person;
+import br.ufc.great.sysadmin.repository.ICommentRepository;
+
+@Service
+public class CommentService extends AbstractService<Comment, Long>{
+	@Autowired
+	private ICommentRepository commentRepository;
+	@Override
+	protected JpaRepository<Comment, Long> getRepository() {
+		return commentRepository;
+	}
+
+	/**
+	 * Busca o comentario por pessoa
+	 * @param person Pessoa
+	 * @return comentario
+	 */
+	public Comment getCommentByPerson(Person person) {
+		return commentRepository.findByPerson(person);
+	}
+	
+	/**
+	 * Busca o comentário por descricao
+	 * @param description Description
+	 * @return comentario
+	 */
+	public Comment getCommentByDescription(String description) {
+		return commentRepository.findByDescription(description);
+	}
+}

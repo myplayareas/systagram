@@ -3,6 +3,7 @@ package br.ufc.great.sysadmin.model;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -25,12 +26,31 @@ public class Person extends AbstractModel<Long>{
 	private String cep;
 	private double latitude=0;
 	private double longitude=0;
-	@OneToMany
+	@OneToMany(cascade=CascadeType.ALL)
 	private List<Notes> notes = new LinkedList<>();
-	
+	@OneToMany(cascade=CascadeType.ALL)
+	private List<Comment> comments = new LinkedList<>();
+	@OneToMany(cascade=CascadeType.ALL)
+	private List<Picture> pictures = new LinkedList<>();
 	public Person() {
 	}
 	
+	public List<Picture> getPictures() {
+		return pictures;
+	}
+
+	public void setPictures(List<Picture> pictures) {
+		this.pictures = pictures;
+	}
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
+
 	/**
 	 * Get all notes from person
 	 * @return list of notes
@@ -96,4 +116,19 @@ public class Person extends AbstractModel<Long>{
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
+	public void addComment(Comment comment, Person person) {
+		comment.setPerson(person);
+		this.getComments().add(comment);
+	}
+	public Comment getMyComment(Long id) {
+		List<Comment> list = this.getComments();
+		
+		for (Comment element : list) {
+			if (element.getId()==id) {
+				return element;
+			}
+		}
+		return null;
+	}
+
 }
