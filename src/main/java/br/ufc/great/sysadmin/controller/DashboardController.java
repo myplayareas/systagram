@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import br.ufc.great.sysadmin.model.Users;
+import br.ufc.great.sysadmin.service.CommentService;
+import br.ufc.great.sysadmin.service.PictureService;
 import br.ufc.great.sysadmin.service.UsersService;
 import br.ufc.great.sysadmin.util.MySessionInfo;
 
@@ -22,10 +24,22 @@ public class DashboardController {
 	
 	private UsersService userService;
 	private String acesso;
+	private CommentService commentService;
+	private PictureService pictureService;
 	
 	@Autowired
 	private MySessionInfo mySessionInfo;
 
+	@Autowired
+	public void setCommentService(CommentService commentService) {
+		this.commentService = commentService;
+	}
+	
+	@Autowired
+	public void setPictureService(PictureService pictureService) {
+		this.pictureService = pictureService;
+	}
+	
 	@Autowired
 	public void setUserService(UsersService userService) {
 		this.userService = userService;
@@ -67,8 +81,13 @@ public class DashboardController {
     @RequestMapping("/dashboard/admin")
     public String indexAdmin(Model model, Principal principal) {
     	int totalUsers=0;
+    	int totalComments=0;
+    	int totalPictures=0;
     	
-    	totalUsers = (int) this.userService.count();    	
+    	totalUsers = (int) this.userService.count();
+    	totalComments = (int) this.commentService.count();
+    	totalPictures = (int) this.pictureService.count();
+    	
     	Users loginUser = userService.getUserByUserName(mySessionInfo.getCurrentUser().getUsername());
     	
     	acesso = mySessionInfo.getAcesso();
@@ -76,10 +95,13 @@ public class DashboardController {
     	List<Users> listUsers = this.userService.getAll();
     	    	
     	model.addAttribute("totalUsers", totalUsers);
+    	model.addAttribute("totalComments", totalComments);
+    	model.addAttribute("totalPictures", totalPictures);
     	model.addAttribute("listUsers", listUsers);
     	model.addAttribute("loginusername", loginUser.getUsername());
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
+    	model.addAttribute("person", loginUser.getPerson());
     	model.addAttribute("acesso", acesso);
     	     	
         return "dashboard/index";
@@ -102,6 +124,7 @@ public class DashboardController {
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
     	model.addAttribute("totalUsers", totalUsers);
+    	model.addAttribute("person", loginUser.getPerson());
     	model.addAttribute("acesso", acesso);
     	
         return "dashboard/indexUser";

@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.ufc.great.sysadmin.model.Comment;
 import br.ufc.great.sysadmin.model.Person;
+import br.ufc.great.sysadmin.model.Picture;
 import br.ufc.great.sysadmin.model.Users;
 import br.ufc.great.sysadmin.service.CommentService;
 import br.ufc.great.sysadmin.service.PersonService;
@@ -212,27 +213,33 @@ public class PersonController {
 
         return "person/formEditMyComment";
     }
+            
+    /**
+     * Seleciona uma foto da pessoa para ser adicionada no seu album
+     * @param personId id da Pessoa
+     * @param model model
+     * @return formPicture.html
+     */
+	@RequestMapping(value = "/person/{personId}/select/picture")
+	public String selectImage(@PathVariable(value = "personId") Long personId, Model model){
+		Person person = this.personService.get(personId);
+		Picture picture = new Picture();
+		
+		picture.setPerson(person);
+		checkUser();
+		
+        model.addAttribute("person", person);
+        model.addAttribute("picture", picture);
+        model.addAttribute("loginusername", loginUser.getUsername());
+    	model.addAttribute("loginemailuser", loginUser.getEmail());
+    	model.addAttribute("loginuserid", loginUser.getId());
+    	model.addAttribute("personid", person.getId());
+    	model.addAttribute("username", person.getUser().getUsername());
+    	
+        return "person/formPicture";
+	}
     
-    public String addPicture() {
-    	//TODO
-    	return null;
-    }
-    
-    public String savePicture() {
-    	//TODO
-    	return null;
-    }
-    
-    public String listMyPictures() {
-    	//TODO
-    	return null;
-    }
-    
-    public String listAllPictures() {
-    	//TODO
-    	return null;
-    }
-    
+	@RequestMapping(value="/person/{personId}/picture/{pictureId}/edit")
     public String editMyPicture() {
     	//TODO
     	return null;

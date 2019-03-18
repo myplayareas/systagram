@@ -116,6 +116,7 @@ public class Person extends AbstractModel<Long>{
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
+
 	public void addComment(Comment comment, Person person) {
 		comment.setPerson(person);
 		this.getComments().add(comment);
@@ -131,4 +132,20 @@ public class Person extends AbstractModel<Long>{
 		return null;
 	}
 
+	public void addPicture(Picture picture, Person person) {
+		picture.setPerson(person);
+		this.getPictures().add(picture);
+	}
+	public Picture getMyPicture(Long id) {
+		List<Picture> list = this.getPictures();
+		
+		for (Picture element : list) {
+			if (element.getId()==id) {
+				return element;
+			}
+		}
+		return null;
+	}
+
+	
 }
