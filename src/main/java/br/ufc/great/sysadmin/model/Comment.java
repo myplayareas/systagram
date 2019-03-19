@@ -6,9 +6,10 @@ import javax.persistence.OneToOne;
 @Entity
 public class Comment extends AbstractModel<Long>{
 	private static final long serialVersionUID = 1L;
+	private String description;	
+
 	@OneToOne
 	private Person person;
-	private String description;
 	
 	public Comment() {
 	}

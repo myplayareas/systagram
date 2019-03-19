@@ -26,14 +26,25 @@ public class Person extends AbstractModel<Long>{
 	private String cep;
 	private double latitude=0;
 	private double longitude=0;
-	@OneToMany(cascade=CascadeType.ALL)
-	private List<Notes> notes = new LinkedList<>();
+
 	@OneToMany(cascade=CascadeType.ALL)
 	private List<Comment> comments = new LinkedList<>();
 	@OneToMany(cascade=CascadeType.ALL)
 	private List<Picture> pictures = new LinkedList<>();
+	@OneToMany(cascade=CascadeType.ALL)
+	private List<Post> posts = new LinkedList<>();
+
 	public Person() {
 	}
+	
+	public List<Post> getPosts() {
+		return posts;
+	}
+
+	public void setPosts(List<Post> posts) {
+		this.posts = posts;
+	}
+
 	
 	public List<Picture> getPictures() {
 		return pictures;
@@ -51,22 +62,6 @@ public class Person extends AbstractModel<Long>{
 		this.comments = comments;
 	}
 
-	/**
-	 * Get all notes from person
-	 * @return list of notes
-	 */
-	public List<Notes> getNotes() {
-		return notes;
-	}
-	
-	/**
-	 * Set a list of notes from person
-	 * @param notes list of notes
-	 */
-	public void setNotes(List<Notes> notes) {
-		this.notes = notes;
-	}
-	
 	public Users getUser() {
 		return user;
 	}
@@ -147,5 +142,8 @@ public class Person extends AbstractModel<Long>{
 		return null;
 	}
 
+	public void addPost(Post post) {
+		this.posts.add(post);
+	}
 	
 }

@@ -16,5 +16,17 @@ public class ManipuladorDatas {
 		
 		return (dateFormat.format(date)); 
 	}
+
+	public static String getFormattedDataTime(String padrao, Date date) {
+		DateFormat dateFormat = new SimpleDateFormat(padrao);
+		
+		return (dateFormat.format(date)); 
+	}
+
+	
+	public static Date getDate() {
+		Date date = new Date();
+		return date;
+	}
 	
 }

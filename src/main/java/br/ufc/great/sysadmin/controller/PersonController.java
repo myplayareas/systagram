@@ -14,11 +14,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import br.ufc.great.sysadmin.model.Comment;
 import br.ufc.great.sysadmin.model.Person;
 import br.ufc.great.sysadmin.model.Picture;
+import br.ufc.great.sysadmin.model.Post;
 import br.ufc.great.sysadmin.model.Users;
 import br.ufc.great.sysadmin.service.CommentService;
 import br.ufc.great.sysadmin.service.PersonService;
 import br.ufc.great.sysadmin.service.PictureService;
+import br.ufc.great.sysadmin.service.PostService;
 import br.ufc.great.sysadmin.service.UsersService;
+import br.ufc.great.sysadmin.util.ManipuladorDatas;
 import br.ufc.great.sysadmin.util.MySessionInfo;
 
 /**
@@ -34,10 +37,17 @@ public class PersonController {
 	private Users loginUser;
 	private CommentService commentService;
 	private PictureService pictureService;
+	private PostService postService;
 	
 	@Autowired
 	private MySessionInfo mySessionInfo;
+	
 
+	@Autowired
+	public void setPostService(PostService postService) {
+		this.postService = postService;
+	}
+	
 	@Autowired
 	public void setPictureService(PictureService pictureService) {
 		this.pictureService = pictureService;
@@ -244,5 +254,75 @@ public class PersonController {
     	//TODO
     	return null;
     }
+	
+	/**
+	 * Carrega a página contendo todos os posts do usuário
+	 * @param id Id da pessoa
+	 * @param model Model
+	 * @return listMyPosts.html
+	 */
+	@RequestMapping("/person/{id}/post")
+	public String listMyPosts(@PathVariable Long id, Model model) {
+		Person person = this.personService.get(id);
+		List<Post> list = person.getPosts();
+		
+		checkUser();
+
+		model.addAttribute("list", list);
+		model.addAttribute("loginusername", loginUser.getUsername());
+		model.addAttribute("loginemailuser", loginUser.getEmail());
+		model.addAttribute("loginuserid", loginUser.getId());
+
+		return "/person/listMyPosts";
+	}
+
+	/**
+	 * Dada uma figura selecionada por uma pessoa cria um post nessa figura
+	 * @param pictureId Id da figura
+	 * @param personId Id da pessoa
+	 * @param model Model
+	 * @return listMyPosts.html
+	 */
+	@RequestMapping("/person/{personId}/picture/{pictureId}/post")
+	public String createPost(@PathVariable(value="pictureId") Long pictureId, @PathVariable(value="personId") Long personId
+			, Model model) {
+		
+		Picture picture = this.pictureService.get(pictureId);
+		Person person = this.personService.get(personId);
+		
+		//Cria um novo post e associa a uma pessoa e a uma figura
+		Post post = new Post();
+		post.setPerson(person);
+		person.addPost(post);
+		post.setPicture(picture);
+		picture.setPost(post);
+
+		//Recupera a data corrente do sistema
+		String padrao = "yyyy/MM/dd HH:mm:ss";
+		String currentData = ManipuladorDatas.getCurrentDataTime(padrao);
+		new ManipuladorDatas();
+		//Salva a data corrente no post
+		post.setDate(ManipuladorDatas.getDate());
+		
+		//Carrega os dados do usuário logado
+		checkUser();
+		
+		//Salva o post no repositório de posts
+		this.postService.save(post);
+		//Atualiza pessoa com o post
+		this.personService.update(person);
+		//Atualiza foto com o post
+		this.pictureService.update(picture);
+		
+		List<Post> list = person.getPosts();
+		
+		model.addAttribute("person", person);
+		model.addAttribute("list", list);
+		model.addAttribute("loginusername", loginUser.getUsername());
+		model.addAttribute("loginemailuser", loginUser.getEmail());
+		model.addAttribute("loginuserid", loginUser.getId());
+		
+		return "/person/listMyPosts";
+	}
 
 }

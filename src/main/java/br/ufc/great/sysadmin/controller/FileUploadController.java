@@ -6,7 +6,6 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,9 +20,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.ufc.great.sysadmin.model.Person;
 import br.ufc.great.sysadmin.model.Picture;
+import br.ufc.great.sysadmin.model.Post;
 import br.ufc.great.sysadmin.model.Users;
 import br.ufc.great.sysadmin.service.PersonService;
 import br.ufc.great.sysadmin.service.PictureService;
+import br.ufc.great.sysadmin.service.PostService;
 import br.ufc.great.sysadmin.service.UsersService;
 import br.ufc.great.sysadmin.util.Constantes;
 import br.ufc.great.sysadmin.util.ManipuladorDatas;
@@ -65,6 +65,12 @@ public class FileUploadController {
 		return "uploads/uploadview";
 	}
 	
+	/**
+	 * Carrega a página contendo todas a fotos do usuário
+	 * @param id Id da pessoa
+	 * @param model Model
+	 * @return listMypictures
+	 */
 	@RequestMapping("/upload/person/{id}/picture")
 	public String listMyPictures(@PathVariable Long id, Model model) {
 		Person person = this.personService.get(id);
@@ -82,6 +88,13 @@ public class FileUploadController {
 		return "/uploads/listMypictures";
 	}
 	
+	/**
+	 * Renomeia um arquivo
+	 * @param file arquivo
+	 * @param newName novo nome
+	 * @return Arquivo com novo nome
+	 * @throws IOException
+	 */
 	public File renameFile(File file, String newName) throws IOException {
 		// File (or directory) with new name
 		File file2 = new File(newName);
@@ -100,6 +113,13 @@ public class FileUploadController {
 
 	}
 
+	/**
+	 * Faz o upload de uma imagem do usuário
+	 * @param idUser Id do Usuário
+	 * @param model Model
+	 * @param files Array de Arquivos
+	 * @return Formulário do Usuário
+	 */
 	@RequestMapping("/upload/selected/image/users/{idUser}")
 	public String upload(@PathVariable(value = "idUser") Long idUser, Model model,@RequestParam("photouser") MultipartFile[] files) {
 		StringBuilder fileNames = new StringBuilder();
@@ -177,6 +197,7 @@ public class FileUploadController {
 
 		checkUser();
 		
+		//List de fotos da pessoa
 		List<Picture> list = person.getPictures();
 
 		model.addAttribute("user", person.getUser());
@@ -190,6 +211,12 @@ public class FileUploadController {
 		return "/uploads/listMypictures";
 	}
 
+	/**
+	 * Carrega um array de bytes de uma foto
+	 * @param imageName identificador interno da foto
+	 * @return array de bytes do arquivo da foto
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/upload/picture/{pictureName}")
 	@ResponseBody
 	public byte[] getPicture(@PathVariable(value = "pictureName") String imageName) throws IOException {
@@ -206,7 +233,12 @@ public class FileUploadController {
 		
 	}
 
-	
+	/**
+	 * Carrega um array de bytes de uma imagem de um usuário
+	 * @param imageName id do Usuário
+	 * @return array de bytes do arquivo da imagem
+	 * @throws IOException
+	 */	
 	@RequestMapping(value = "/upload/image/users/{imageName}")
 	@ResponseBody
 	public byte[] getUserImage(@PathVariable(value = "imageName") String imageName) throws IOException {
@@ -240,4 +272,29 @@ public class FileUploadController {
 		return "viewfileuploaded";
 	}
 
+	/**
+	 * Dada uma foto selecionada de uma pessoa, remove essa foto
+	 * @param pictureId Id da pessoa
+	 * @param personId Id da fota
+	 * @param ra mensagem de retorno
+	 * @return listMyPictures
+	 */
+	@RequestMapping(value="/upload/delete/picture/{pictureId}/person/{personId}")
+	public String deletePictureFromPerson(@PathVariable(value="pictureId") String pictureId, @PathVariable(value="personId") String personId,  
+			final RedirectAttributes ra) {
+		
+		Person person = this.personService.get(Long.parseLong(personId));
+		Picture picture = this.pictureService.get(Long.valueOf(pictureId));
+		
+		if (person.getPictures().remove(picture)) {
+			this.personService.save(person);
+			this.pictureService.delete(picture.getId());
+			ra.addFlashAttribute("successFlash", "A foto " + pictureId + " foi removida com sucesso!");
+		}else {
+			ra.addFlashAttribute("errorFlash", "A foto " + pictureId + " NÁO foi removida.");
+		}
+		
+		return "redirect:/upload/person/"+ personId + "/picture";
+	}
+	
 }

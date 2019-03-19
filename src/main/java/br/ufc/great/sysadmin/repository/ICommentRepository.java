@@ -1,5 +1,7 @@
 package br.ufc.great.sysadmin.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,6 +15,6 @@ import br.ufc.great.sysadmin.model.Person;
  */
 @Repository
 public interface ICommentRepository extends JpaRepository<Comment, Long>{
-	Comment findByPerson(Person person);
-	Comment findByDescription(String description);
+	List<Comment> findByPerson(Person person);
+	List<Comment> findByDescription(String description);
 }

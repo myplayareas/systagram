@@ -1,5 +1,7 @@
 package br.ufc.great.sysadmin.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
@@ -22,7 +24,7 @@ public class CommentService extends AbstractService<Comment, Long>{
 	 * @param person Pessoa
 	 * @return comentario
 	 */
-	public Comment getCommentByPerson(Person person) {
+	public List<Comment> getCommentByPerson(Person person) {
 		return commentRepository.findByPerson(person);
 	}
 	
@@ -31,7 +33,7 @@ public class CommentService extends AbstractService<Comment, Long>{
 	 * @param description Description
 	 * @return comentario
 	 */
-	public Comment getCommentByDescription(String description) {
+	public List<Comment> getCommentByDescription(String description) {
 		return commentRepository.findByDescription(description);
 	}
 }

@@ -1,10 +1,6 @@
 package br.ufc.great.sysadmin.model;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -12,15 +8,14 @@ public class Picture extends AbstractModel<Long>{
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private String path;
-	private int likes;
 	private String systemName;
+	
 	@OneToOne
 	private Person person;
-	@OneToMany
-	private List<Comment> comments = new LinkedList<>();
+	@OneToOne
+	private Post post;
 	
 	public Picture() {
-		this.likes=0;
 	}
 	
 	public Person getPerson() {
@@ -28,12 +23,6 @@ public class Picture extends AbstractModel<Long>{
 	}
 	public void setPerson(Person person) {
 		this.person = person;
-	}
-	public List<Comment> getComments() {
-		return comments;
-	}
-	public void setComments(List<Comment> comments) {
-		this.comments = comments;
 	}
 	public String getName() {
 		return name;
@@ -47,15 +36,6 @@ public class Picture extends AbstractModel<Long>{
 	public void setPath(String path) {
 		this.path = path;
 	}
-	public int getLikes() {
-		return likes;
-	}
-	public void setLikes(int likes) {
-		this.likes = likes;
-	}
-	public void incrementLike() {
-		this.likes++;
-	}
 
 	public String getSystemName() {
 		return systemName;
@@ -63,5 +43,13 @@ public class Picture extends AbstractModel<Long>{
 
 	public void setSystemName(String systemName) {
 		this.systemName = systemName;
+	}
+
+	public Post getPost() {
+		return post;
+	}
+
+	public void setPost(Post post) {
+		this.post = post;
 	}
 }
