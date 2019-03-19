@@ -25,7 +25,6 @@
                 <tr>
                     <th>Id</th>
                     <th>Nome</th>
-                    <th>Likes</th>
                     <th>Path</th>
                     <th>Imagem</th>
                     <th>Ações</th>
@@ -34,11 +33,12 @@
                 	<input id="id" name="id" th:value="${row.id}" type="hidden" />
                 	<td th:text="${row.id}"></td>                	
                     <td th:text="${row.name}"></td>
-                    <td th:text="${row.likes}"></td>
                     <td th:text="${row.path}"></td>
                     <td><img alt="Image" th:src="${'/upload/picture/'+row.systemName}" width="100" height="100" /></td>
                     <td>
-                        <a th:href="${'/person/'}+ ${loginuserid} + ${'/picture/'}+ ${row.id} + ${'/edit/'}">editar</a>
+                        <a th:href="${'/person/'}+ ${loginuserid} + ${'/picture/'}+ ${row.id} + ${'/edit'}">Editar</a>-             
+                        <a th:href="${'/upload/delete/picture/'} + ${row.id} + ${'/person/'} + ${row.person.id}">Excluir</a>-
+                        <a th:href="${'/person/'} + ${row.person.id} + ${'/picture/'} + ${row.id} + ${'/post'}">Postar</a>
                     </td>
                 </tr>
             </table>

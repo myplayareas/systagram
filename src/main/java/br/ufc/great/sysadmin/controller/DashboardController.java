@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import br.ufc.great.sysadmin.model.Users;
 import br.ufc.great.sysadmin.service.CommentService;
 import br.ufc.great.sysadmin.service.PictureService;
+import br.ufc.great.sysadmin.service.PostService;
 import br.ufc.great.sysadmin.service.UsersService;
 import br.ufc.great.sysadmin.util.MySessionInfo;
 
@@ -26,10 +27,16 @@ public class DashboardController {
 	private String acesso;
 	private CommentService commentService;
 	private PictureService pictureService;
+	private PostService postService;
 	
 	@Autowired
 	private MySessionInfo mySessionInfo;
 
+	@Autowired
+	public void setPostService(PostService postService) {
+		this.postService = postService;
+	}
+	
 	@Autowired
 	public void setCommentService(CommentService commentService) {
 		this.commentService = commentService;
@@ -83,12 +90,15 @@ public class DashboardController {
     	int totalUsers=0;
     	int totalComments=0;
     	int totalPictures=0;
+    	int totalPosts=0;
     	
     	totalUsers = (int) this.userService.count();
-    	totalComments = (int) this.commentService.count();
-    	totalPictures = (int) this.pictureService.count();
     	
     	Users loginUser = userService.getUserByUserName(mySessionInfo.getCurrentUser().getUsername());
+    	
+    	totalComments = loginUser.getPerson().getComments().size();
+    	totalPictures = loginUser.getPerson().getPictures().size();
+    	totalPosts = loginUser.getPerson().getPosts().size();
     	
     	acesso = mySessionInfo.getAcesso();
     	
@@ -97,6 +107,7 @@ public class DashboardController {
     	model.addAttribute("totalUsers", totalUsers);
     	model.addAttribute("totalComments", totalComments);
     	model.addAttribute("totalPictures", totalPictures);
+    	model.addAttribute("totalPosts", totalPosts);
     	model.addAttribute("listUsers", listUsers);
     	model.addAttribute("loginusername", loginUser.getUsername());
     	model.addAttribute("loginemailuser", loginUser.getEmail());

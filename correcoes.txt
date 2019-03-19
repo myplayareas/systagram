@@ -2,6 +2,10 @@
 Revisar sugestões em https://www.baeldung.com/spring-security-session
 
 2. Ao logar pela primeira vez mostra a tela 404 de invalidSession
+java.lang.NullPointerException: null
+	at br.ufc.great.sysadmin.util.MySessionInfo.getCurrentUser(MySessionInfo.java:33) ~[classes/:na]
+	
+Mostra que está retornando User null
 
 Obs: este erro não acontece na janela privada
 - mas ao fazer o logout o erro volta, ou seja, depois do logout ao tentar fazer novo login mostra a tela 404 de invalidSession
