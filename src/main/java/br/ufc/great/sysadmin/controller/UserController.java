@@ -72,6 +72,7 @@ public class UserController {
     	model.addAttribute("loginusername", loginUser.getUsername());
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
+    	model.addAttribute("loginuser", loginUser);
       	
     	model.addAttribute("list", list);
 		
@@ -100,6 +101,7 @@ public class UserController {
         model.addAttribute("loginusername", loginUser.getUsername());
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
+    	model.addAttribute("loginuser", loginUser);
         
         return "users/list";
     }
@@ -117,6 +119,7 @@ public class UserController {
         model.addAttribute("loginusername", loginUser.getUsername());
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
+    	model.addAttribute("loginuser", loginUser);
     	
         return "users/form";
     }
@@ -138,6 +141,7 @@ public class UserController {
         model.addAttribute("loginusername", loginUser.getUsername());
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
+    	model.addAttribute("loginuser", loginUser);
     	
         return "users/formpwd";
     }
@@ -159,6 +163,7 @@ public class UserController {
         model.addAttribute("loginusername", loginUser.getUsername());
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());    	
+    	model.addAttribute("loginuser", loginUser);
     	
         return "users/formpwdProfile";
 
@@ -322,6 +327,7 @@ public class UserController {
         model.addAttribute("loginusername", loginUser.getUsername());
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
+    	model.addAttribute("loginuser", loginUser);
         
         return "users/listAllUsers";
     }
@@ -343,6 +349,7 @@ public class UserController {
     	model.addAttribute("loginuserid", loginUser.getId());
     	model.addAttribute("idUser", editUser.getId());
     	model.addAttribute("username", editUser.getUsername());
+    	model.addAttribute("loginuser", loginUser);
     	
         return "users/formImage";
 	}

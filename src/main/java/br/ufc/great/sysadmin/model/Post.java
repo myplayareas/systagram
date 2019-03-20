@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -18,7 +19,7 @@ public class Post extends AbstractModel<Long>{
 	private Person person;
 	@OneToOne
 	private Picture picture;
-	@OneToMany
+	@OneToMany(cascade=CascadeType.ALL)
 	private List<Comment> comments = new LinkedList<>();
 	
 	public Post() {

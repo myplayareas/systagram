@@ -1,12 +1,15 @@
 package br.ufc.great.sysadmin.model;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
 @Entity
 public class Comment extends AbstractModel<Long>{
 	private static final long serialVersionUID = 1L;
-	private String description;	
+	private String description;
+	private Date date;
 
 	@OneToOne
 	private Person person;
@@ -24,5 +27,11 @@ public class Comment extends AbstractModel<Long>{
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public Date getDate() {
+		return date;
+	}
+	public void setDate(Date date) {
+		this.date = date;
 	}
 }

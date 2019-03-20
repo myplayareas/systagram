@@ -27,7 +27,7 @@
 					<!-- Box Comment -->
 					<div class="box-header with-border">
 						<div class="user-block">
-							<img class="img-circle" th:src="${'/upload/image/users/'+loginuserid}" alt="User Image" />
+							<img class="img-circle" th:src="${'/upload/image/users/'+row.person.user.id}" alt="User Image" />
 							<span class="username">
 								<a href="#" th:text="${row.person.name}"></a></span> <span class="description" th:text="${row.date}">
 							</span>
@@ -47,14 +47,13 @@
 					<div th:each="row2 : ${row.comments}" class="box-footer box-comments" style="">
 						<div class="box-comment">
 							<!-- User image -->
-							<img class="img-circle img-sm" th:src="${'/upload/image/users/'+row2.person.id}" alt="User Image" />
+							<img class="img-circle img-sm" th:src="${'/upload/image/users/'+row2.person.user.id}" alt="User Image" />
 							<div class="comment-text">
-								<span class="username" th:text="${row2.person.name}">
-									<span class="text-muted pull-right">8:03 PM Today</span>
-								</span>
+								<span class="username" th:text="${row2.person.name}"></span>
+								<span class="text-muted pull-right" th:text="${row2.date}"></span>
 								<!-- /.username -->
 								<p>
-									<span th:text="${'/upload/image/users/'+row2.description}"></span>
+									<span th:text="${row2.description}"></span>
 								</p>
 							</div>
 							<!-- /.comment-text -->
@@ -62,10 +61,22 @@
 						<!-- /.box-comment -->
 					</div>
 					<!-- /.box-footer -->
-
+									<!-- Formulário de novo comentário no post -->
+				<div class="box-footer" style="">
+					<div>
+					  <form enctype="application/x-www-form-urlencoded" th:object="${comment}" th:action="@{'/person/' + ${loginuser.person.id} + '/post/' + ${row.id} + '/comment'}" method="post">
+					    <img class="img-responsive img-circle img-sm" th:src="${'/upload/image/users/'+loginuserid}" alt="Alt Text"/>
+					    <!-- .img-push is used to add margin to elements next to floating images -->
+					    <div class="img-push">
+					      <input type="text" class="form-control input-sm" th:field="*{description}" id="description" placeholder="Press enter to post comment"/>
+					    </div>
+					  </form>
+				  	</div>
+				</div>
+					
 				</div>
 				<!-- Final da Lista com as fotos comentadas -->
-
+				
 			</div>
 
 		</div>

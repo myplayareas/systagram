@@ -35,10 +35,10 @@
 								<a th:href="${'/users/list'}">Usuários</a>
 							</div>
 							<div class="col-xs-4 text-center">
-								<a th:href="${'/upload/person/' + loginuserid + '/picture'}">Fotos</a>
+								<a th:href="${'/upload/person/'} + ${loginuser.person.id} + ${'/picture'}">Fotos</a>
 							</div>
 							<div class="col-xs-4 text-center">
-								<a th:href="${'/person/'} + ${loginuserid} + ${'/post'}">Posts</a>
+								<a th:href="${'/person/'} + ${loginuser.person.id} + ${'/post'}">Posts</a>
 							</div>
 						</div> <!-- /.row -->
 					</li>

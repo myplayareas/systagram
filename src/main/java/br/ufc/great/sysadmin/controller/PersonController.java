@@ -89,6 +89,7 @@ public class PersonController {
     	model.addAttribute("loginusername", loginUser.getUsername());
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
+    	model.addAttribute("loginuser", loginUser);
 
         return "person/list";
     }
@@ -111,6 +112,7 @@ public class PersonController {
     	model.addAttribute("loginusername", loginUser.getUsername());
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
+    	model.addAttribute("loginuser", loginUser);
 
         return "person/listMyComments";
 
@@ -130,6 +132,7 @@ public class PersonController {
     	model.addAttribute("loginusername", loginUser.getUsername());
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
+    	model.addAttribute("loginuser", loginUser);
     	
     	return "person/listComments";
     }
@@ -152,6 +155,7 @@ public class PersonController {
     	model.addAttribute("loginusername", loginUser.getUsername());
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
+    	model.addAttribute("loginuser", loginUser);
     	
     	return "person/formComment";
     }
@@ -220,6 +224,7 @@ public class PersonController {
     	model.addAttribute("loginusername", loginUser.getUsername());
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
+    	model.addAttribute("loginuser", loginUser);
 
         return "person/formEditMyComment";
     }
@@ -245,6 +250,7 @@ public class PersonController {
     	model.addAttribute("loginuserid", loginUser.getId());
     	model.addAttribute("personid", person.getId());
     	model.addAttribute("username", person.getUser().getUsername());
+    	model.addAttribute("loginuser", loginUser);
     	
         return "person/formPicture";
 	}
@@ -262,16 +268,25 @@ public class PersonController {
 	 * @return listMyPosts.html
 	 */
 	@RequestMapping("/person/{id}/post")
-	public String listMyPosts(@PathVariable Long id, Model model) {
+	public String listMyPosts(@PathVariable Long id, Model model, final RedirectAttributes ra) {
 		Person person = this.personService.get(id);
+		
+		if (person.getPosts().size() == 0) {
+			ra.addFlashAttribute("errorFlash", "O usuário " + person.getName() + " ainda não possui posts!");
+			return "redirect:/users/list";
+		}
+		
 		List<Post> list = person.getPosts();
 		
 		checkUser();
 
+		Comment comment = new Comment();
 		model.addAttribute("list", list);
+		model.addAttribute("comment", comment);
 		model.addAttribute("loginusername", loginUser.getUsername());
 		model.addAttribute("loginemailuser", loginUser.getEmail());
 		model.addAttribute("loginuserid", loginUser.getId());
+		model.addAttribute("loginuser", loginUser);
 
 		return "/person/listMyPosts";
 	}
@@ -285,7 +300,7 @@ public class PersonController {
 	 */
 	@RequestMapping("/person/{personId}/picture/{pictureId}/post")
 	public String createPost(@PathVariable(value="pictureId") Long pictureId, @PathVariable(value="personId") Long personId
-			, Model model) {
+			, Model model, final RedirectAttributes ra) {
 		
 		Picture picture = this.pictureService.get(pictureId);
 		Person person = this.personService.get(personId);
@@ -316,13 +331,87 @@ public class PersonController {
 		
 		List<Post> list = person.getPosts();
 		
+		Comment comment = new Comment();
+		
 		model.addAttribute("person", person);
 		model.addAttribute("list", list);
+		model.addAttribute("comment", comment);
 		model.addAttribute("loginusername", loginUser.getUsername());
 		model.addAttribute("loginemailuser", loginUser.getEmail());
 		model.addAttribute("loginuserid", loginUser.getId());
+		model.addAttribute("loginuser", loginUser);
+		ra.addFlashAttribute("successFlash", "Post da imagem criado com sucesso!");
 		
-		return "/person/listMyPosts";
+		return "redirect:/person/" + person.getId() + "/post"; 
 	}
+	
+	/*
+	 * 1. Crie um comentário
+	 * 2. Faca o post do comentário passando o id do post 
+	 * 
+	 * /person/post/'} + ${row.id} + ${'/comment'
+	 * 
+	 * guarde a pessoa logada que está fazendo o comentário
+	 * salve esta pessoa no comentário
+	 * pegue a data corrente do comentário
+	 * salve a data corrente no comentário
+	 * 
+	 * salve o comentário no post
+	 * 
+	 * salve o post no repositório de posts
+	 *
+	 * redirecione para o listMyPost do usuário selecionado com todas as atualizaçòes
+	 */ 
+	@RequestMapping(value="/person/{personLogged}/post/{postId}/comment", method = RequestMethod.POST)
+	public String saveCommentInSelectedPost(Comment comment, @PathVariable(value="postId") Long postId, 
+			@PathVariable(value="personLogged") Long personLogged, Model model, final RedirectAttributes ra) {
+
+		//Pega o Post selecionado
+		Post post = this.postService.get(postId);
+		//Pega o Dono do post
+		Person personPost = post.getPerson();
+		//Pessoa que vai fazer o comentário no post selecionado
+		Person personComment = this.personService.get(personLogged);
+
+		//Recupera a data corrente do sistema
+		new ManipuladorDatas();
+		//Salva a data corrente no comment
+		comment.setDate(ManipuladorDatas.getDate());
+
+		//Adiciona o comment no repositorio
+		this.commentService.save(comment);
+
+		//Adiciona o comment no personComment
+		personComment.addComment(comment, personComment);
+		
+		//Atualiza o comment
+		this.commentService.update(comment);
+
+		//Atualiza o personComment
+		this.personService.update(personComment);
+		
+		//Adiciona o comment no post
+		post.addComment(comment);
+
+		//Atualiza o post
+		this.postService.update(post);
+		
+		//Gera a lista de posts atualizada com o novo comentário
+		List<Post> list = personPost.getPosts();
+		
+		Comment newComment = new Comment();
+		model.addAttribute("person", personPost);
+		model.addAttribute("list", list);
+		model.addAttribute("comment", newComment);
+		model.addAttribute("loginusername", loginUser.getUsername());
+		model.addAttribute("loginemailuser", loginUser.getEmail());
+		model.addAttribute("loginuserid", loginUser.getId());
+		model.addAttribute("loginuser", loginUser);
+		
+		ra.addFlashAttribute("successFlash", "O comentário foi salvo com sucesso.");
+		
+		return "redirect:/person/"+ personPost.getId() + "/post";
+	}
+	
 
 }

@@ -1,5 +1,6 @@
 package br.ufc.great.sysadmin.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
@@ -12,7 +13,7 @@ public class Picture extends AbstractModel<Long>{
 	
 	@OneToOne
 	private Person person;
-	@OneToOne
+	@OneToOne(cascade=CascadeType.ALL)
 	private Post post;
 	
 	public Picture() {
