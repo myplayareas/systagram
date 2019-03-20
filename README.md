@@ -4,9 +4,13 @@ Aplicação para postar fotos e receber comentários.
 Features
 ---
 
-* CRUD de usuários
-* Controle de autenticação de usuários
-* Camada de segurança
+1. Controle de autenticação (Login/Logout)
+2. Dashboard de usuário de acordo com sua permissão
+3. Controle de permissões (Admin/User)
+4. Controle de uploads de arquivos
+5. Gerenciar Fotos
+6. Gerenciar Posts 
+7. Gerenciar Comentários nos posts
 
 Sobre as operações para execução da aplicação
 ---

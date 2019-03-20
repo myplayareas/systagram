@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import br.ufc.great.sysadmin.model.Comment;
 import br.ufc.great.sysadmin.model.Person;
+import br.ufc.great.sysadmin.model.Picture;
+import br.ufc.great.sysadmin.model.Post;
 import br.ufc.great.sysadmin.model.Role;
 import br.ufc.great.sysadmin.model.Users;
 import br.ufc.great.sysadmin.service.AuthoritiesService;
@@ -278,8 +281,17 @@ public class UserController {
     @RequestMapping(value = "/users/personsaveedited", method = RequestMethod.POST)
     public String savePersonEdited(Person person, final RedirectAttributes ra) {
     	String local="";
+    	   	
+    	Person original = this.personService.get(person.getId());
     	
-    	Person save = this.personService.save(person);
+    	List<Comment> comments = original.getComments();
+    	List<Picture> pictures = original.getPictures();
+    	List<Post> posts = original.getPosts();
+
+    	person.setComments(comments);
+    	person.setPictures(pictures);
+    	person.setPosts(posts);
+    	this.personService.update(person);
 		ra.addFlashAttribute("successFlash", "Os dados pessoais do " + person.getUser().getUsername() + " foram alterados com sucesso.");
     	
 		if (this.mySessionInfo.getAcesso().equals("ADMIN")) {
