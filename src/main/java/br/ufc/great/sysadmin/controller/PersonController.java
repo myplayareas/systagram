@@ -173,7 +173,8 @@ public class PersonController {
     	
     	Person person = this.personService.get(id);
     	person.addComment(comment, person);
-    	Person save = this.personService.save(person);
+    	//Atualiza a pessoa com o novo comentario
+    	this.personService.update(person);
     	ra.addFlashAttribute("successFlash", "Comentário salvo com sucesso.");
 
     	if (this.mySessionInfo.getAcesso().equals("ADMIN")) {
