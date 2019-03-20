@@ -64,6 +64,7 @@ public class AccessControlController {
     	model.addAttribute("loginusername", loginUser.getUsername());
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
+    	model.addAttribute("loginuser", loginUser);
 
         return "accesscontrol/list";
     }
@@ -82,6 +83,7 @@ public class AccessControlController {
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
     	model.addAttribute("list", list);
+    	model.addAttribute("loginuser", loginUser);
 		
 		return "accesscontrol/users";
 	}
@@ -101,6 +103,7 @@ public class AccessControlController {
         model.addAttribute("loginusername", loginUser.getUsername());
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
+    	model.addAttribute("loginuser", loginUser);
     	
         return "accesscontrol/formAuthority";
     }
@@ -146,6 +149,7 @@ public class AccessControlController {
     	model.addAttribute("loginusername", loginUser.getUsername());
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
+    	model.addAttribute("loginuser", loginUser);
 
         return "accesscontrol/form";
     }
@@ -180,6 +184,7 @@ public class AccessControlController {
     	model.addAttribute("loginusername", loginUser.getUsername());
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
+    	model.addAttribute("loginuser", loginUser);
 
         return "accesscontrol/formEdit";
     }

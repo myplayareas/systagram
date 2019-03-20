@@ -32,6 +32,7 @@ public class MyErrorController implements ErrorController  {
 			model.addAttribute("loginemailuser", loginUser.getEmail());
 			model.addAttribute("loginuserid", loginUser.getId());
 			model.addAttribute("acesso", acesso);			
+			model.addAttribute("loginuser", loginUser);
 		}
 		
 	   Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);

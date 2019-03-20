@@ -114,6 +114,7 @@ public class DashboardController {
     	model.addAttribute("loginuserid", loginUser.getId());
     	model.addAttribute("person", loginUser.getPerson());
     	model.addAttribute("acesso", acesso);
+    	model.addAttribute("loginuser", loginUser);
     	     	
         return "dashboard/index";
     }
@@ -137,6 +138,7 @@ public class DashboardController {
     	model.addAttribute("totalUsers", totalUsers);
     	model.addAttribute("person", loginUser.getPerson());
     	model.addAttribute("acesso", acesso);
+    	model.addAttribute("loginuser", loginUser);
     	
         return "dashboard/indexUser";
     }

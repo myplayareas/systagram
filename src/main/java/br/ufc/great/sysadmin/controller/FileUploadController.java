@@ -72,8 +72,14 @@ public class FileUploadController {
 	 * @return listMypictures
 	 */
 	@RequestMapping("/upload/person/{id}/picture")
-	public String listMyPictures(@PathVariable Long id, Model model) {
+	public String listMyPictures(@PathVariable Long id, Model model, final RedirectAttributes ra) {
 		Person person = this.personService.get(id);
+		
+		if (person.getPictures().size() == 0) {
+			ra.addFlashAttribute("errorFlash", "Você precisa cadastrar pelo menos uma imagem!");
+			//redireciona para o formulário para adicionar uma nova foto
+			return "redirect:/person/" + id + "/select/picture"; 
+		}
 		
 		List<Picture> list = person.getPictures();
 		
@@ -84,6 +90,7 @@ public class FileUploadController {
 		model.addAttribute("loginusername", loginUser.getUsername());
 		model.addAttribute("loginemailuser", loginUser.getEmail());
 		model.addAttribute("loginuserid", loginUser.getId());
+		model.addAttribute("loginuser", loginUser);
 		
 		return "/uploads/listMypictures";
 	}
@@ -144,6 +151,7 @@ public class FileUploadController {
 		model.addAttribute("loginusername", loginUser.getUsername());
 		model.addAttribute("loginemailuser", loginUser.getEmail());
 		model.addAttribute("loginuserid", loginUser.getId());
+		model.addAttribute("loginuser", loginUser);
 		model.addAttribute("successFlash", "Successfully uploaded files "+fileNames.toString());
 
 		return "uploads/formpwd";
@@ -206,6 +214,7 @@ public class FileUploadController {
 		model.addAttribute("loginusername", loginUser.getUsername());
 		model.addAttribute("loginemailuser", loginUser.getEmail());
 		model.addAttribute("loginuserid", loginUser.getId());
+		model.addAttribute("loginuser", loginUser);
 		model.addAttribute("successFlash", "Successfully uploaded files " + fileNames.toString());
 
 		return "/uploads/listMypictures";
