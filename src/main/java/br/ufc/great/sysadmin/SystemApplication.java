@@ -19,6 +19,7 @@ public class SystemApplication {
 		String mainPath = "TBD";
 		String uploadsPath = Constantes.uploadDirectory;
 		String picturesPath = Constantes.picturesDirectory;
+		String userPath = Constantes.userDirectory;
 		String banco = "TBD";
 		String portaBanco = "TBD";
 		String ipServidor = "TBD";
@@ -26,6 +27,7 @@ public class SystemApplication {
 		String portaSA = "TBD";
 		
 		System.out.println("Diretório principal: " + mainPath);
+		System.out.println("Diretório base do usuário: " + userPath);
 		System.out.println("Diretório de controle de uploads: "+uploadsPath);
 		System.out.println("Diretório de fotos: " + picturesPath);
 		System.out.println("Banco da aplicação: " + banco);

@@ -20,15 +20,15 @@ Sobre as operações para execução da aplicação
 2. É preciso ter o mysql 5 instalado na sua instância.
 - Obs: algumas vezes você pode enfrentar problemas com o driver mysql se você estiver usando mysql> 5.6, por exemplo se você tiver usando mysql 8 ou posterior, então você tem que substituir o driver de acordo com sua versão. Assim, é necessário atualizar as dependências do pom.xml de acordo com sua configuração e versão local.
 
-3. Crie o banco dbsysweb e aponte para o banco.
+3. Crie o banco dbsystagram e aponte para o banco.
 ```
-mysql> create database dbsysweb
-mysql> use dbsysweb
+mysql> create database dbsystagram
+mysql> use dbsystagram
 ```
 
-4. Rode o script restaura-dbsysweb.sql para criar as tabelas com os dados de exemplo.
+4. Rode o script restaura-dbsystagram.sql para criar as tabelas com os dados de exemplo.
 ```
-mysql> source scripts/sql/restaura-dbsysweb.sql
+mysql> source scripts/sql/restaura-dbsystagram.sql
 ```
 
 5. Usuário admin (armando) tem senha armando.
