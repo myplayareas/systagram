@@ -35,7 +35,7 @@
                     <td th:text="${row.name}"></td>
                     <td th:text="${row.user.email}"></td>
                     <td th:text="${row.user.enabled}"></td>
-                    <td><img alt="Image" th:src="${'/upload/image/users/'+row.user.id}" width="50" height="50" /></td>
+                    <td><img alt="Image" th:src="${s3awsurl+'users/'+row.user.id+'.png'}" width="50" height="50" /></td>
                 </tr>
             </table>
         </div>

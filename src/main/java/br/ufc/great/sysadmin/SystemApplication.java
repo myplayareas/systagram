@@ -13,7 +13,7 @@ import br.ufc.great.sysadmin.util.Constantes;
  */
 @SpringBootApplication
 public class SystemApplication {
-
+	
 	public static void main(String[] args) {
 		new Constantes();
 		String mainPath = "TBD";
@@ -39,5 +39,6 @@ public class SystemApplication {
 		new File(uploadsPath).mkdir();
 		
 		SpringApplication.run(SystemApplication.class, args);
+		
 	}
 }

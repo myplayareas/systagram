@@ -190,7 +190,7 @@
                   <ul class="users-list clearfix">
 						<li th:each="user : ${listUsers}">
 							<input id="id" name="id" th:value="${user.id}" type="hidden" /> 
-							<img alt="Image" th:src="${'/upload/image/users/'+user.id}" width="128" height="128" /> 
+							<img alt="Image" th:src="${s3awsurl+'users/'+user.id+'.png'}" width="128" height="128" /> 
 							<a class="users-list-name" href="#"><spam th:text="${user.username}"></spam></a>
 						</li>
 				  </ul>

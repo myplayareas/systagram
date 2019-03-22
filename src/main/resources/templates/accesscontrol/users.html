@@ -36,7 +36,7 @@
                     <!--  <td th:text="${row.name}"></td>  -->
                     <td th:text="${row.email}"></td>
                     <td th:text="${row.enabled}"></td>
-                    <td><img alt="Image" th:src="${'/upload/image/users/'+row.id}" width="50" height="50" /></td>
+                    <td><img alt="Image" th:src="${s3awsurl+'users/'+row.id+'.png'}" width="50" height="50" /></td>
                     <td>
                         <a th:href="${'/accesscontrol/users/edit/' + row.id}">Permissões</a>
                     </td>

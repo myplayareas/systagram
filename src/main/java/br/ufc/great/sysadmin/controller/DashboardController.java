@@ -1,5 +1,9 @@
 package br.ufc.great.sysadmin.controller;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.List;
 
@@ -8,12 +12,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
+
 import br.ufc.great.sysadmin.model.Users;
 import br.ufc.great.sysadmin.service.CommentService;
 import br.ufc.great.sysadmin.service.PictureService;
 import br.ufc.great.sysadmin.service.PostService;
 import br.ufc.great.sysadmin.service.UsersService;
+import br.ufc.great.sysadmin.util.Constantes;
 import br.ufc.great.sysadmin.util.MySessionInfo;
+import br.ufc.great.sysadmin.util.aws.s3.S3ClientManipulator;
 
 /**
  * Faz o controle do Dashboard
@@ -115,6 +124,12 @@ public class DashboardController {
     	model.addAttribute("person", loginUser.getPerson());
     	model.addAttribute("acesso", acesso);
     	model.addAttribute("loginuser", loginUser);
+    	model.addAttribute("s3awsurl", new Constantes().s3awsurl);
+    	
+    	/*
+    	 * Habilite esse trecho apenas quando inserir as credenciais de acesso ao AWS
+    		testaAcessoS3Amazon();
+    	*/
     	     	
         return "dashboard/index";
     }
@@ -139,8 +154,34 @@ public class DashboardController {
     	model.addAttribute("person", loginUser.getPerson());
     	model.addAttribute("acesso", acesso);
     	model.addAttribute("loginuser", loginUser);
+    	model.addAttribute("s3awsurl", new Constantes().s3awsurl);
     	
         return "dashboard/indexUser";
     }
+    
+	public void testaAcessoS3Amazon() {
+    	String bucketName; 
+    	S3ClientManipulator s3Client; 
+    	
+    	try {
+    		//Informa o nome do bucket
+    		bucketName = "systagram-uploads2";
+    		//Cria uma instancia do Manipulador de S3
+    		s3Client = new S3ClientManipulator(bucketName);
+
+    		System.out.println("Acessando o S3 da AWS");
+    		//Lista os objetos do bucket selecionado OK
+    		for (S3ObjectSummary item : s3Client.getObjectsFromBucket()) {
+    			System.out.println("*" + item.getKey());
+    		}
+    		
+    	}
+    	catch (AmazonServiceException e) {
+    	    System.err.println(e.getErrorMessage());
+    	    e.printStackTrace();
+    	    System.exit(1);
+    	} 
+	}
+
        
 }

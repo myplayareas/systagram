@@ -22,7 +22,7 @@
 					<div class="box-body box-profile">
 						<a th:href="${'/users/'+user.id+'/select/image'}"> <img
 							class="profile-user-img img-responsive img-circle"
-							th:src="${'/upload/image/users/'+loginuserid}"
+							th:src="${s3awsurl}+${'users/'}+${loginuserid}+${'.png'}"
 							alt="User profile picture"></img>
 						</a>
 						<h3 class="profile-username text-center">
