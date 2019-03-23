@@ -37,7 +37,7 @@
 					<!-- /.box-header -->
 					
 					<div class="box-body" style="">
-						<img alt="Image" th:src="${'/upload/picture/'} + ${row.picture.systemName}" />
+						<img alt="Image" th:src="${s3awsurl} + ${'uploads/pictures/'}+ ${row.picture.systemName} + ${'.png'}" />
 						<br></br>
               				<span class="description" th:text="${row.picture.name}"></span> 
               				<span class="pull-right text-muted">27 likes - 2 comments</span>

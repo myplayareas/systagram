@@ -223,7 +223,7 @@
                 <li class="item" th:each="picture : ${person.pictures}">
 					<input id="id" name="id" th:value="${picture.id}" type="hidden" />  
 						<div class="product-img">
-							<img alt="Image" th:src="${'/upload/picture/'+picture.systemName}" width="50" height="50" />
+							<img alt="Image" th:src="${s3awsurl + 'uploads/pictures/' +picture.systemName+'.png'}" width="50" height="50" />
 						</div>
 						<div class="product-info">
                     		<a href="javascript:void(0)" class="product-title"><span th:text="${picture.name}"></span></a>
