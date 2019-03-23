@@ -7,10 +7,13 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.concurrent.Executors;
 
+import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.event.ProgressListener;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -20,9 +23,13 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.PutObjectResult;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
+import com.amazonaws.services.s3.transfer.TransferManager;
+import com.amazonaws.services.s3.transfer.TransferManagerBuilder;
+import com.amazonaws.services.s3.transfer.Upload;
 
 import br.ufc.great.sysadmin.util.Constantes;
 
@@ -32,7 +39,7 @@ import br.ufc.great.sysadmin.util.Constantes;
  * @author armandosoaressousa
  *
  */
-public class S3ClientManipulator {
+public class S3ClientManipulator{
 	//Define as credenciais
 	private BasicAWSCredentials awsCreds;
 	
@@ -116,6 +123,61 @@ public class S3ClientManipulator {
         String key_name = Paths.get(file_path).getFileName().toString();        
         s3Client.putObject(bucketName, key_name, new File(file_path));
 	}
+
+	/**
+	 * OK!
+	 * Salva um arquivo em um diretório especifico do bucket
+	 * @param file arquivo
+	 * @param destinationFolder diretorio destino do bucket
+	 */
+	public void uploadFile(File file, String destinationFolder) {
+        //Create a client
+        AmazonS3 s3Client = this.getS3Client();
+        //Concatenate the folder and file name to get the full destination path
+        String destinationPath = destinationFolder + file.getName();
+        //Create a PutObjectRequest
+        PutObjectRequest putObjectRequest = new PutObjectRequest(this.getBucketName(), destinationPath, file).withCannedAcl(CannedAccessControlList.PublicRead);
+        //Perform the upload, and assign the returned result object for further processing
+        PutObjectResult putObjectResult = s3Client.putObject(putObjectRequest);
+    }
+	/*
+	 * See 
+	 * https://www.baeldung.com/aws-s3-multipart-upload
+	 * ATUALMENTE SÓ SALVA DIRETO NO BUCKET
+	 * TODO: CORRIGIR PARA SALVAR em um diretório especifico
+	 */
+	public void uploadMultiFile(String keyName, String filePath) {
+		//String keyName = "my-picture.jpg";
+		//String filePath = "documents/my-picture.jpg";
+
+		AmazonS3 amazonS3 = getS3Client();
+
+		int maxUploadThreads = 5;
+
+		TransferManager tm = TransferManagerBuilder
+				.standard()
+				.withS3Client(amazonS3)
+				.withMultipartUploadThreshold((long) (5 * 1024 * 1024))
+				.withExecutorFactory(() -> Executors.newFixedThreadPool(maxUploadThreads))
+				.build();
+
+		ProgressListener progressListener =
+				progressEvent -> System.out.println("Transferred bytes: " + progressEvent.getBytesTransferred());
+				
+				PutObjectRequest request = new PutObjectRequest(getBucketName(), keyName, new File(filePath+keyName));
+				
+				request.setGeneralProgressListener(progressListener);
+
+				Upload upload = tm.upload(request);
+
+				try {
+					upload.waitForCompletion();
+					System.out.println("Upload complete.");
+				} catch (AmazonClientException | InterruptedException e) {
+					System.out.println("Error occurred while uploading file");
+					e.printStackTrace();
+				}
+	}		
 	
 	/**
 	 * Faz o upload de imagem como um arquivo público do bucket definido na inicializacao
