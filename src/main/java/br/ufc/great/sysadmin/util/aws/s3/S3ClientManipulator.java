@@ -136,35 +136,19 @@ public class S3ClientManipulator{
         //Concatenate the folder and file name to get the full destination path
         String destinationPath = destinationFolder + file.getName();
         //Create a PutObjectRequest
-        PutObjectRequest putObjectRequest = new PutObjectRequest(this.getBucketName(), destinationPath, file).withCannedAcl(CannedAccessControlList.PublicRead);
-        //Perform the upload, and assign the returned result object for further processing
-        PutObjectResult putObjectResult = s3Client.putObject(putObjectRequest);
-    }
-	/*
-	 * See 
-	 * https://www.baeldung.com/aws-s3-multipart-upload
-	 * ATUALMENTE SÓ SALVA DIRETO NO BUCKET
-	 * TODO: CORRIGIR PARA SALVAR em um diretório especifico
-	 */
-	public void uploadMultiFile(String keyName, String filePath) {
-		//String keyName = "my-picture.jpg";
-		//String filePath = "documents/my-picture.jpg";
-
-		AmazonS3 amazonS3 = getS3Client();
-
+        PutObjectRequest request = new PutObjectRequest(this.getBucketName(), destinationPath, file).withCannedAcl(CannedAccessControlList.PublicRead);
+        
 		int maxUploadThreads = 5;
 
 		TransferManager tm = TransferManagerBuilder
 				.standard()
-				.withS3Client(amazonS3)
+				.withS3Client(s3Client)
 				.withMultipartUploadThreshold((long) (5 * 1024 * 1024))
 				.withExecutorFactory(() -> Executors.newFixedThreadPool(maxUploadThreads))
 				.build();
 
 		ProgressListener progressListener =
 				progressEvent -> System.out.println("Transferred bytes: " + progressEvent.getBytesTransferred());
-				
-				PutObjectRequest request = new PutObjectRequest(getBucketName(), keyName, new File(filePath+keyName));
 				
 				request.setGeneralProgressListener(progressListener);
 
@@ -177,7 +161,8 @@ public class S3ClientManipulator{
 					System.out.println("Error occurred while uploading file");
 					e.printStackTrace();
 				}
-	}		
+
+    }
 	
 	/**
 	 * Faz o upload de imagem como um arquivo público do bucket definido na inicializacao
