@@ -56,8 +56,8 @@ public class S3ClientManipulator{
 		this.awsCreds = new BasicAWSCredentials(new Constantes().access_key_id, new Constantes().secret_key_id);
 		
 		this.s3Client = AmazonS3ClientBuilder.standard()
-				//.withRegion(Regions.US_EAST_1)
-				.withRegion(Regions.US_WEST_2)
+				.withRegion(Regions.US_EAST_1)
+				//.withRegion(Regions.US_WEST_2)
                 .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
                 .build();
 	}
@@ -138,6 +138,8 @@ public class S3ClientManipulator{
         //Create a PutObjectRequest
         PutObjectRequest request = new PutObjectRequest(this.getBucketName(), destinationPath, file).withCannedAcl(CannedAccessControlList.PublicRead);
         
+	//PutObjectResult putObjectResult = s3Client.putObject(request);
+	
 		int maxUploadThreads = 5;
 
 		TransferManager tm = TransferManagerBuilder
@@ -162,6 +164,7 @@ public class S3ClientManipulator{
 					e.printStackTrace();
 				}
 
+	
     }
 	
 	/**

@@ -154,7 +154,7 @@ public class FileUploadController {
 	@RequestMapping("/upload/selected/image/users/{idUser}")
 	public String upload(@PathVariable(value = "idUser") Long idUser, Model model,@RequestParam("photouser") MultipartFile[] files) {
 		S3ClientManipulator s3Client = new S3ClientManipulator();
-		String bucketName = "systagram-uploads2";
+		String bucketName = "systagram-uploads";
 		s3Client.setBucketName(bucketName);
 		StringBuilder fileNames = new StringBuilder();
 		String idAux = String.valueOf(idUser);
@@ -208,7 +208,7 @@ public class FileUploadController {
 	public String uploadPicture(@PathVariable(value = "personId") Long personId, Picture picture, Model model,@RequestParam("photouser") MultipartFile[] files
 			, RedirectAttributes ra) throws IOException {
 		S3ClientManipulator s3Client = new S3ClientManipulator();
-		String bucketName = "systagram-uploads2";
+		String bucketName = "systagram-uploads";
 		s3Client.setBucketName(bucketName);
 
 		StringBuilder fileNames = new StringBuilder();
@@ -267,7 +267,7 @@ public class FileUploadController {
 		model.addAttribute("s3awsurl", new Constantes().s3awsurl);
 		model.addAttribute("successFlash", "Successfully uploaded files " + fileNames.toString());
 
-		return "/uploads/listMypictures";
+		return "uploads/listMyPictures";
 	}
 
 	/**
