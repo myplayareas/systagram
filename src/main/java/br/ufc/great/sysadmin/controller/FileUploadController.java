@@ -92,7 +92,7 @@ public class FileUploadController {
 		model.addAttribute("loginuserid", loginUser.getId());
 		model.addAttribute("loginuser", loginUser);
 		
-		return "/uploads/listMypictures";
+		return "uploads/listMyPictures";
 	}
 	
 	/**
