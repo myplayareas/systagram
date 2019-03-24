@@ -22,6 +22,7 @@ import br.ufc.great.sysadmin.model.Users;
 import br.ufc.great.sysadmin.service.AuthoritiesService;
 import br.ufc.great.sysadmin.service.PersonService;
 import br.ufc.great.sysadmin.service.UsersService;
+import br.ufc.great.sysadmin.util.Constantes;
 import br.ufc.great.sysadmin.util.GeradorSenha;
 import br.ufc.great.sysadmin.util.MySessionInfo;
 
@@ -76,6 +77,7 @@ public class UserController {
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
     	model.addAttribute("loginuser", loginUser);
+    	model.addAttribute("s3awsurl", new Constantes().s3awsurl);
       	
     	model.addAttribute("list", list);
 		
@@ -105,6 +107,7 @@ public class UserController {
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
     	model.addAttribute("loginuser", loginUser);
+    	model.addAttribute("s3awsurl", new Constantes().s3awsurl);
         
         return "users/list";
     }
@@ -123,6 +126,7 @@ public class UserController {
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
     	model.addAttribute("loginuser", loginUser);
+    	model.addAttribute("s3awsurl", new Constantes().s3awsurl);
     	
         return "users/form";
     }
@@ -145,6 +149,7 @@ public class UserController {
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
     	model.addAttribute("loginuser", loginUser);
+    	model.addAttribute("s3awsurl", new Constantes().s3awsurl);
     	
         return "users/formpwd";
     }
@@ -167,6 +172,7 @@ public class UserController {
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());    	
     	model.addAttribute("loginuser", loginUser);
+    	model.addAttribute("s3awsurl", new Constantes().s3awsurl);
     	
         return "users/formpwdProfile";
 
@@ -340,6 +346,7 @@ public class UserController {
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
     	model.addAttribute("loginuser", loginUser);
+    	model.addAttribute("s3awsurl", new Constantes().s3awsurl);
         
         return "users/listAllUsers";
     }
@@ -362,6 +369,7 @@ public class UserController {
     	model.addAttribute("idUser", editUser.getId());
     	model.addAttribute("username", editUser.getUsername());
     	model.addAttribute("loginuser", loginUser);
+    	model.addAttribute("s3awsurl", new Constantes().s3awsurl);
     	
         return "users/formImage";
 	}

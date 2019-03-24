@@ -32,7 +32,7 @@
                 	<input id="id" name="id" th:value="${row.id}" type="hidden" />
                     <td th:text="${row.description}"></td>
                     <td th:text="${row.person.name}"></td>
-                    <td><img alt="Image" th:src="${'/upload/image/users/'+row.person.id}" width="50" height="50" /></td>
+                    <td><img alt="Image" th:src="${s3awsurl+'users/'+row.person.id+'.png'}" width="50" height="50" /></td>
                     <td>
                         <a th:href="${'/person/'} + ${row.person.id} + ${'/comment/'}+ ${row.id} +${'/edit'}">editar</a>
                     </td>

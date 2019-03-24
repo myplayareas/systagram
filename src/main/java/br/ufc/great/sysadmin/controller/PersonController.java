@@ -21,6 +21,7 @@ import br.ufc.great.sysadmin.service.PersonService;
 import br.ufc.great.sysadmin.service.PictureService;
 import br.ufc.great.sysadmin.service.PostService;
 import br.ufc.great.sysadmin.service.UsersService;
+import br.ufc.great.sysadmin.util.Constantes;
 import br.ufc.great.sysadmin.util.ManipuladorDatas;
 import br.ufc.great.sysadmin.util.MySessionInfo;
 
@@ -90,6 +91,7 @@ public class PersonController {
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
     	model.addAttribute("loginuser", loginUser);
+    	model.addAttribute("s3awsurl", new Constantes().s3awsurl);
 
         return "person/list";
     }
@@ -113,6 +115,7 @@ public class PersonController {
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
     	model.addAttribute("loginuser", loginUser);
+    	model.addAttribute("s3awsurl", new Constantes().s3awsurl);
 
         return "person/listMyComments";
 
@@ -133,6 +136,7 @@ public class PersonController {
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
     	model.addAttribute("loginuser", loginUser);
+    	model.addAttribute("s3awsurl", new Constantes().s3awsurl);
     	
     	return "person/listComments";
     }
@@ -156,6 +160,7 @@ public class PersonController {
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
     	model.addAttribute("loginuser", loginUser);
+    	model.addAttribute("s3awsurl", new Constantes().s3awsurl);
     	
     	return "person/formComment";
     }
@@ -226,7 +231,8 @@ public class PersonController {
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
     	model.addAttribute("loginuser", loginUser);
-
+    	model.addAttribute("s3awsurl", new Constantes().s3awsurl);
+    	
         return "person/formEditMyComment";
     }
             
@@ -252,6 +258,7 @@ public class PersonController {
     	model.addAttribute("personid", person.getId());
     	model.addAttribute("username", person.getUser().getUsername());
     	model.addAttribute("loginuser", loginUser);
+    	model.addAttribute("s3awsurl", new Constantes().s3awsurl);
     	
         return "person/formPicture";
 	}
@@ -288,6 +295,7 @@ public class PersonController {
 		model.addAttribute("loginemailuser", loginUser.getEmail());
 		model.addAttribute("loginuserid", loginUser.getId());
 		model.addAttribute("loginuser", loginUser);
+		model.addAttribute("s3awsurl", new Constantes().s3awsurl);
 
 		return "/person/listMyPosts";
 	}
@@ -341,6 +349,7 @@ public class PersonController {
 		model.addAttribute("loginemailuser", loginUser.getEmail());
 		model.addAttribute("loginuserid", loginUser.getId());
 		model.addAttribute("loginuser", loginUser);
+		model.addAttribute("s3awsurl", new Constantes().s3awsurl);
 		ra.addFlashAttribute("successFlash", "Post da imagem criado com sucesso!");
 		
 		return "redirect:/person/" + person.getId() + "/post"; 
@@ -408,6 +417,7 @@ public class PersonController {
 		model.addAttribute("loginemailuser", loginUser.getEmail());
 		model.addAttribute("loginuserid", loginUser.getId());
 		model.addAttribute("loginuser", loginUser);
+		model.addAttribute("s3awsurl", new Constantes().s3awsurl);
 		
 		ra.addFlashAttribute("successFlash", "O comentário foi salvo com sucesso.");
 		

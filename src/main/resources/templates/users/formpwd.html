@@ -19,7 +19,7 @@
 	<div class="box box-primary">
             <div class="box-body box-profile">
               <a th:href="${'/users/'+user.id+'/select/image'}">
-              	<img class="profile-user-img img-responsive img-circle" th:src="${'/upload/image/users/'+user.id}" alt="User profile picture"></img>
+              	<img class="profile-user-img img-responsive img-circle" th:src="${s3awsurl+'users/'+user.id+'.png'}" alt="User profile picture"></img>
               </a>
 			
 			<h3 class="profile-username text-center"><spam th:text="${user.username}"></spam></h3>

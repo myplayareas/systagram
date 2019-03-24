@@ -1,7 +1,11 @@
 package br.ufc.great.sysadmin.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -20,15 +24,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.ufc.great.sysadmin.model.Person;
 import br.ufc.great.sysadmin.model.Picture;
-import br.ufc.great.sysadmin.model.Post;
 import br.ufc.great.sysadmin.model.Users;
 import br.ufc.great.sysadmin.service.PersonService;
 import br.ufc.great.sysadmin.service.PictureService;
-import br.ufc.great.sysadmin.service.PostService;
 import br.ufc.great.sysadmin.service.UsersService;
 import br.ufc.great.sysadmin.util.Constantes;
 import br.ufc.great.sysadmin.util.ManipuladorDatas;
 import br.ufc.great.sysadmin.util.MySessionInfo;
+import br.ufc.great.sysadmin.util.aws.s3.S3ClientManipulator;
 
 @Controller
 public class FileUploadController {
@@ -91,6 +94,7 @@ public class FileUploadController {
 		model.addAttribute("loginemailuser", loginUser.getEmail());
 		model.addAttribute("loginuserid", loginUser.getId());
 		model.addAttribute("loginuser", loginUser);
+		model.addAttribute("s3awsurl", new Constantes().s3awsurl);
 		
 		return "uploads/listMyPictures";
 	}
@@ -120,6 +124,26 @@ public class FileUploadController {
 
 	}
 
+	public File convert(MultipartFile file)
+	{    
+	    File convFile = null;
+		try {
+			convFile = new File(file.getOriginalFilename());
+			convFile.createNewFile(); 
+			FileOutputStream fos = new FileOutputStream(convFile); 
+			fos.write(file.getBytes());
+			fos.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+	    
+	    return convFile;
+	}
+
 	/**
 	 * Faz o upload de uma imagem do usuário
 	 * @param idUser Id do Usuário
@@ -129,19 +153,34 @@ public class FileUploadController {
 	 */
 	@RequestMapping("/upload/selected/image/users/{idUser}")
 	public String upload(@PathVariable(value = "idUser") Long idUser, Model model,@RequestParam("photouser") MultipartFile[] files) {
+		S3ClientManipulator s3Client = new S3ClientManipulator();
+		String bucketName = "systagram-uploads2";
+		s3Client.setBucketName(bucketName);
 		StringBuilder fileNames = new StringBuilder();
-		new Constantes();
-		String uploadFilePath = Constantes.uploadUserDirectory; 	  
 		String idAux = String.valueOf(idUser);
+		String s3awspath = "users/";
+		String destinationFolder = s3awspath;
 
 		for (MultipartFile file : files) {
-			Path fileNameAndPath = Paths.get(uploadFilePath, idAux+".png");
+			//Nome do arquivo e path completo
+			Path fileNameAndPath = Paths.get(file.getOriginalFilename());
 			fileNames.append(idAux+".png"+" ");
+			
+			File myFile = convert(file);
+			File newFile = new File(idAux+".png");
+			
+			//Transforma a imagem em png para padronizar as imagens do sistema
 			try {
-				Files.write(fileNameAndPath, file.getBytes());
+				FileChannel src = new FileInputStream(myFile).getChannel();
+				FileChannel dest = new FileOutputStream(newFile).getChannel();
+				dest.transferFrom(src, 0, src.size());
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+
+			s3Client.uploadFile(newFile, destinationFolder );
 		}
 
 		checkUser();
@@ -152,11 +191,12 @@ public class FileUploadController {
 		model.addAttribute("loginemailuser", loginUser.getEmail());
 		model.addAttribute("loginuserid", loginUser.getId());
 		model.addAttribute("loginuser", loginUser);
+		model.addAttribute("s3awsurl", new Constantes().s3awsurl);
 		model.addAttribute("successFlash", "Successfully uploaded files "+fileNames.toString());
 
 		return "uploads/formpwd";
 	}
-
+	
 	/**
 	 * Faz o upload de fotos da pessoa para seu album de fotos
 	 * @param personId id da Pessoa
@@ -165,7 +205,12 @@ public class FileUploadController {
 	 * @return carrega listMyPictures.html
 	 */
 	@RequestMapping(value="/upload/selected/picture/person/{personId}")
-	public String uploadPicture(@PathVariable(value = "personId") Long personId, Picture picture, Model model,@RequestParam("photouser") MultipartFile[] files, RedirectAttributes ra) {
+	public String uploadPicture(@PathVariable(value = "personId") Long personId, Picture picture, Model model,@RequestParam("photouser") MultipartFile[] files
+			, RedirectAttributes ra) throws IOException {
+		S3ClientManipulator s3Client = new S3ClientManipulator();
+		String bucketName = "systagram-uploads2";
+		s3Client.setBucketName(bucketName);
+
 		StringBuilder fileNames = new StringBuilder();
 
 		new Constantes();
@@ -178,12 +223,12 @@ public class FileUploadController {
 		String dataAux = currentData.replace("/", "-");
 		String data1 = dataAux.replaceAll(":", "-").trim();
 		String data = data1.replace(" ", "-");
-		
-		//Define o diretório da imagem e o nome do arquivo que será salvo no filesystem
-		String path = uploadFilePath + FileSystems.getDefault().getSeparator() + idAux + "-" + data + ".png";
-		String systemName = idAux + "-" + data;
-		
-    	picture.setPath(path);
+
+		String systemName = idAux + "-" + data;		
+		String s3awspathPictures = "uploads/pictures/";
+		String destinationFolder = s3awspathPictures;
+
+    	picture.setPath(destinationFolder);
     	picture.setSystemName(systemName);
     	
     	//Dono da imagem
@@ -192,15 +237,19 @@ public class FileUploadController {
     	    	
     	Person save = this.personService.save(person);
 		
-    	//Salva os bytes do arquivo no arquivo criado no filesystem
+    	//Salva os bytes do arquivo no arquivo criado no bucket do S3 da AWS
 		for (MultipartFile file : files) {
-			Path fileNameAndPath = Paths.get(uploadFilePath, idAux + "-" + data + ".png");
+			Path fileNameAndPath = Paths.get(file.getOriginalFilename());
 			fileNames.append(idAux + "-" + data + ".png"+" ");
-			try {
-				Files.write(fileNameAndPath, file.getBytes());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			
+			File myFile = convert(file);
+			File newFile = new File(systemName+".png");
+
+			FileChannel src = new FileInputStream(myFile).getChannel();
+			FileChannel dest = new FileOutputStream(newFile).getChannel();
+			dest.transferFrom(src, 0, src.size());
+			
+			s3Client.uploadFile(newFile, destinationFolder );
 		}
 
 		checkUser();
@@ -215,6 +264,7 @@ public class FileUploadController {
 		model.addAttribute("loginemailuser", loginUser.getEmail());
 		model.addAttribute("loginuserid", loginUser.getId());
 		model.addAttribute("loginuser", loginUser);
+		model.addAttribute("s3awsurl", new Constantes().s3awsurl);
 		model.addAttribute("successFlash", "Successfully uploaded files " + fileNames.toString());
 
 		return "/uploads/listMypictures";

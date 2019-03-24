@@ -16,6 +16,7 @@ import br.ufc.great.sysadmin.model.Role;
 import br.ufc.great.sysadmin.model.Users;
 import br.ufc.great.sysadmin.service.AuthoritiesService;
 import br.ufc.great.sysadmin.service.UsersService;
+import br.ufc.great.sysadmin.util.Constantes;
 import br.ufc.great.sysadmin.util.MySessionInfo;
 
 /**
@@ -65,6 +66,7 @@ public class AccessControlController {
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
     	model.addAttribute("loginuser", loginUser);
+    	model.addAttribute("s3awsurl", new Constantes().s3awsurl);
 
         return "accesscontrol/list";
     }
@@ -84,6 +86,7 @@ public class AccessControlController {
     	model.addAttribute("loginuserid", loginUser.getId());
     	model.addAttribute("list", list);
     	model.addAttribute("loginuser", loginUser);
+    	model.addAttribute("s3awsurl", new Constantes().s3awsurl);
 		
 		return "accesscontrol/users";
 	}
@@ -104,6 +107,7 @@ public class AccessControlController {
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
     	model.addAttribute("loginuser", loginUser);
+    	model.addAttribute("s3awsurl", new Constantes().s3awsurl);
     	
         return "accesscontrol/formAuthority";
     }
@@ -150,6 +154,7 @@ public class AccessControlController {
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
     	model.addAttribute("loginuser", loginUser);
+    	model.addAttribute("s3awsurl", new Constantes().s3awsurl);
 
         return "accesscontrol/form";
     }
@@ -185,6 +190,7 @@ public class AccessControlController {
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
     	model.addAttribute("loginuser", loginUser);
+    	model.addAttribute("s3awsurl", new Constantes().s3awsurl);
 
         return "accesscontrol/formEdit";
     }

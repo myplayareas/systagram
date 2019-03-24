@@ -27,7 +27,7 @@
 					<!-- Box Comment -->
 					<div class="box-header with-border">
 						<div class="user-block">
-							<img class="img-circle" th:src="${'/upload/image/users/'+row.person.user.id}" alt="User Image" />
+							<img class="img-circle" th:src="${s3awsurl+'users/'+row.person.user.id+'.png'}" alt="User Image" />
 							<span class="username">
 								<a href="#" th:text="${row.person.name}"></a></span> <span class="description" th:text="${row.date}">
 							</span>
@@ -37,7 +37,7 @@
 					<!-- /.box-header -->
 					
 					<div class="box-body" style="">
-						<img alt="Image" th:src="${'/upload/picture/'} + ${row.picture.systemName}" />
+						<img alt="Image" th:src="${s3awsurl} + ${'uploads/pictures/'}+ ${row.picture.systemName} + ${'.png'}" />
 						<br></br>
               				<span class="description" th:text="${row.picture.name}"></span> 
               				<span class="pull-right text-muted">27 likes - 2 comments</span>
@@ -47,7 +47,7 @@
 					<div th:each="row2 : ${row.comments}" class="box-footer box-comments" style="">
 						<div class="box-comment">
 							<!-- User image -->
-							<img class="img-circle img-sm" th:src="${'/upload/image/users/'+row2.person.user.id}" alt="User Image" />
+							<img class="img-circle img-sm" th:src="${s3awsurl+'users/'+row2.person.user.id+'.png'}" alt="User Image" />
 							<div class="comment-text">
 								<span class="username" th:text="${row2.person.name}"></span>
 								<span class="text-muted pull-right" th:text="${row2.date}"></span>
@@ -65,7 +65,7 @@
 				<div class="box-footer" style="">
 					<div>
 					  <form enctype="application/x-www-form-urlencoded" th:object="${comment}" th:action="@{'/person/' + ${loginuser.person.id} + '/post/' + ${row.id} + '/comment'}" method="post">
-					    <img class="img-responsive img-circle img-sm" th:src="${'/upload/image/users/'+loginuserid}" alt="Alt Text"/>
+					    <img class="img-responsive img-circle img-sm" th:src="${s3awsurl}+${'users/'}+${loginuserid}+${'.png'}" alt="Alt Text"/>
 					    <!-- .img-push is used to add margin to elements next to floating images -->
 					    <div class="img-push">
 					      <input type="text" class="form-control input-sm" th:field="*{description}" id="description" placeholder="Press enter to post comment"/>
