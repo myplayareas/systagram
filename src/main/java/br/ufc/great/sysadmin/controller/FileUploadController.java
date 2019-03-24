@@ -96,7 +96,7 @@ public class FileUploadController {
 		model.addAttribute("loginuser", loginUser);
 		model.addAttribute("s3awsurl", new Constantes().s3awsurl);
 		
-		return "/uploads/listMypictures";
+		return "uploads/listMyPictures";
 	}
 	
 	/**
