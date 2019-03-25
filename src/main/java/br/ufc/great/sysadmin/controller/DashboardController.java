@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.amazonaws.AmazonServiceException;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 import br.ufc.great.sysadmin.model.Users;
@@ -160,15 +161,10 @@ public class DashboardController {
     }
     
 	public void testaAcessoS3Amazon() {
-    	String bucketName; 
-    	S3ClientManipulator s3Client; 
+		String bucketName = new Constantes().bucketPrincipal;
+		S3ClientManipulator s3Client = new S3ClientManipulator(bucketName, Regions.US_EAST_1);
     	
     	try {
-    		//Informa o nome do bucket
-    		bucketName = "systagram-uploads2";
-    		//Cria uma instancia do Manipulador de S3
-    		s3Client = new S3ClientManipulator(bucketName);
-
     		System.out.println("Acessando o S3 da AWS");
     		//Lista os objetos do bucket selecionado OK
     		for (S3ObjectSummary item : s3Client.getObjectsFromBucket()) {

@@ -8,8 +8,11 @@ public class Constantes {
 	public static String uploadDirectory = System.getProperty("user.dir") + FileSystems.getDefault().getSeparator()+ "uploads";
 	public static final String filePathQRCode = System.getProperty("user.dir") + FileSystems.getDefault().getSeparator() + "coupons";
 	public static String uploadUserDirectory = System.getProperty("user.dir") + FileSystems.getDefault().getSeparator() + "users";
-	public static String picturesDirectory = System.getProperty("user.dir") + FileSystems.getDefault().getSeparator() + "uploads" + FileSystems.getDefault().getSeparator() + "pictures";
+	public static String picturesDirectory = System.getProperty("user.dir") + FileSystems.getDefault().getSeparator() + "uploads" + FileSystems.getDefault().getSeparator() + "pictures";	
+	
 	public static String access_key_id = "";
 	public static String secret_key_id = "";
-	public static String s3awsurl = "https://s3-us-west-2.amazonaws.com/systagram-uploads2/";
+	public static String s3awsurl = "https://s3.amazonaws.com/systagram-uploads/";
+	public static String bucketPrincipal = "systagram-uploads";
+
 }
