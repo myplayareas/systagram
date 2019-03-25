@@ -11,6 +11,7 @@ import java.util.concurrent.Executors;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
+import com.amazonaws.ClientConfiguration;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.event.ProgressListener;
@@ -48,6 +49,9 @@ public class S3ClientManipulator{
 
 	//Define o bucket Principal (default)
 	private String bucketName;
+	
+	//Define a regiao do bucket Principal
+	private Regions region = Regions.US_EAST_1;
 
 	/**
 	 * Inicializa o manipulador de buckets com suas credenciais e um client default
@@ -55,20 +59,28 @@ public class S3ClientManipulator{
 	private void init() {
 		this.awsCreds = new BasicAWSCredentials(new Constantes().access_key_id, new Constantes().secret_key_id);
 		
+		ClientConfiguration clientConfiguration = new ClientConfiguration();
+	    clientConfiguration.setSignerOverride("AWSS3V4SignerType");
+
 		this.s3Client = AmazonS3ClientBuilder.standard()
-				//.withRegion(Regions.US_EAST_1)
-				.withRegion(Regions.US_WEST_2)
+				.withRegion(region)
                 .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
+                .withClientConfiguration(clientConfiguration)
+                .withPathStyleAccessEnabled(true)
+                .withChunkedEncodingDisabled(true)
                 .build();
+
 	}
 
 	public S3ClientManipulator() {
+		this.bucketName = new Constantes().bucketPrincipal;
 		init();
 	}
 
-	public S3ClientManipulator(String bucketNamePrincipal) {
-		init();
+	public S3ClientManipulator(String bucketNamePrincipal, Regions region) {
 		this.bucketName = bucketNamePrincipal;
+		this.region = region;
+		init();
 	}
 	
 	public String getBucketName() {
@@ -224,6 +236,14 @@ public class S3ClientManipulator{
 		AmazonS3Client s3Client = (AmazonS3Client)AmazonS3ClientBuilder.defaultClient();
 		
 		return s3Client.getUrl(this.bucketName, fileName);
+	}
+
+	public Regions getRegion() {
+		return region;
+	}
+
+	public void setRegion(Regions region) {
+		this.region = region;
 	}
 
 	

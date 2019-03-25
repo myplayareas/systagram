@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.amazonaws.regions.Regions;
+
 import br.ufc.great.sysadmin.model.Person;
 import br.ufc.great.sysadmin.model.Picture;
 import br.ufc.great.sysadmin.model.Users;
@@ -153,9 +155,9 @@ public class FileUploadController {
 	 */
 	@RequestMapping("/upload/selected/image/users/{idUser}")
 	public String upload(@PathVariable(value = "idUser") Long idUser, Model model,@RequestParam("photouser") MultipartFile[] files) {
-		S3ClientManipulator s3Client = new S3ClientManipulator();
-		String bucketName = "systagram-uploads2";
-		s3Client.setBucketName(bucketName);
+		String bucketName = new Constantes().bucketPrincipal;
+		S3ClientManipulator s3Client = new S3ClientManipulator(bucketName, Regions.US_EAST_1);
+		
 		StringBuilder fileNames = new StringBuilder();
 		String idAux = String.valueOf(idUser);
 		String s3awspath = "users/";
@@ -207,9 +209,8 @@ public class FileUploadController {
 	@RequestMapping(value="/upload/selected/picture/person/{personId}")
 	public String uploadPicture(@PathVariable(value = "personId") Long personId, Picture picture, Model model,@RequestParam("photouser") MultipartFile[] files
 			, RedirectAttributes ra) throws IOException {
-		S3ClientManipulator s3Client = new S3ClientManipulator();
-		String bucketName = "systagram-uploads2";
-		s3Client.setBucketName(bucketName);
+		String bucketName = new Constantes().bucketPrincipal;
+		S3ClientManipulator s3Client = new S3ClientManipulator(bucketName, Regions.US_EAST_1);
 
 		StringBuilder fileNames = new StringBuilder();
 
@@ -267,7 +268,7 @@ public class FileUploadController {
 		model.addAttribute("s3awsurl", new Constantes().s3awsurl);
 		model.addAttribute("successFlash", "Successfully uploaded files " + fileNames.toString());
 
-		return "/uploads/listMypictures";
+		return "uploads/listMyPictures";
 	}
 
 	/**
