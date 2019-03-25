@@ -150,6 +150,8 @@ public class S3ClientManipulator{
         //Create a PutObjectRequest
         PutObjectRequest request = new PutObjectRequest(this.getBucketName(), destinationPath, file).withCannedAcl(CannedAccessControlList.PublicRead);
         
+	//PutObjectResult putObjectResult = s3Client.putObject(request);
+	
 		int maxUploadThreads = 5;
 
 		TransferManager tm = TransferManagerBuilder
@@ -174,6 +176,7 @@ public class S3ClientManipulator{
 					e.printStackTrace();
 				}
 
+	
     }
 	
 	/**

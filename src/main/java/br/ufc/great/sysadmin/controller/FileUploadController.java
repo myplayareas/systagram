@@ -155,6 +155,7 @@ public class FileUploadController {
 	 */
 	@RequestMapping("/upload/selected/image/users/{idUser}")
 	public String upload(@PathVariable(value = "idUser") Long idUser, Model model,@RequestParam("photouser") MultipartFile[] files) {
+
 		String bucketName = new Constantes().bucketPrincipal;
 		S3ClientManipulator s3Client = new S3ClientManipulator(bucketName, Regions.US_EAST_1);
 		
@@ -209,6 +210,7 @@ public class FileUploadController {
 	@RequestMapping(value="/upload/selected/picture/person/{personId}")
 	public String uploadPicture(@PathVariable(value = "personId") Long personId, Picture picture, Model model,@RequestParam("photouser") MultipartFile[] files
 			, RedirectAttributes ra) throws IOException {
+
 		String bucketName = new Constantes().bucketPrincipal;
 		S3ClientManipulator s3Client = new S3ClientManipulator(bucketName, Regions.US_EAST_1);
 
