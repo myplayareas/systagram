@@ -40,7 +40,17 @@
 						<img alt="Image" th:src="${s3awsurl} + ${'uploads/pictures/'}+ ${row.picture.systemName} + ${'.png'}" />
 						<br></br>
               				<span class="description" th:text="${row.picture.name}"></span> 
-              				<span class="pull-right text-muted">27 likes - 2 comments</span>
+              				
+              				<ul class="list-inline">
+ 								<li><a href="#" class="link-black text-sm" shape="rect"><i class="fa fa-thumbs-o-up margin-r-5"></i> Like (<spam th:text="${row.amountOfPositive}"></spam>)</a>
+ 								</li>
+ 								<li><a href="#" class="link-black text-sm" shape="rect"><i class="fa fa-thumbs-o-down margin-r-5"></i> Unlike (<spam th:text="${row.amountOfNegative}"></spam>)</a>
+ 								</li>
+ 								<li class="pull-right">
+ 									<a href="#" class="link-black text-sm" shape="rect"><i class="fa fa-comments-o margin-r-5"></i> Comments (<spam th:text="${row.amountOfComments}"></spam>)</a>
+ 								</li>
+ 							</ul>
+              				
 					</div>
 					
 					<!-- /.box-body -->
@@ -61,6 +71,25 @@
 						<!-- /.box-comment -->
 					</div>
 					<!-- /.box-footer -->
+					<!-- Lista de likes do Post -->
+ 					<div th:each="row3 : ${row.listLikes}" class="box-footer box-comments" style="">
+ 						<div class="box-comment">
+ 							<!-- User image -->
+ 							<img class="img-circle img-sm" th:src="${'/upload/image/users/'+row3.person.user.id}" alt="User Image" />
+ 							<div class="comment-text">
+ 								<span class="username" th:text="${row3.person.name}"></span>
+ 								<span class="text-muted pull-right" th:text="${row3.date}"></span>
+ 								<!-- /.username -->
+ 								<p>
+ 									<span th:text="${row3.mylike}"></span>
+ 								</p>
+ 							</div>
+ 							<!-- /.comment-text -->
+ 						</div>
+ 						<!-- /.box-comment -->
+ 					</div>
+ 					<!-- /.box-footer -->
+					
 									<!-- Formulário de novo comentário no post -->
 				<div class="box-footer" style="">
 					<div>
@@ -74,8 +103,21 @@
 				  	</div>
 				</div>
 					
+					<!-- Formulário de novo like no post -->
+ 				<div class="box-footer" style="">
+ 					<div>
+ 					  <form enctype="application/x-www-form-urlencoded" th:object="${likes}" th:action="@{'/person/' + ${loginuser.person.id} + '/post/' + ${row.id} + '/likes'}" method="post">
+ 					    <img class="img-responsive img-circle img-sm" th:src="${'/upload/image/users/'+loginuserid}" alt="Alt Text"/>
+ 					    <!-- .img-push is used to add margin to elements next to floating images -->
+ 					    <div class="img-push">
+ 					      <input type="text" class="form-control input-sm" th:field="*{mylike}" id="mylike" placeholder="Press enter to post like"/>
+ 					    </div>
+ 					  </form>
+ 				  	</div>
+ 				</div>
+					
 				</div>
-				<!-- Final da Lista com as fotos comentadas -->
+				<!-- Final da Lista com as fotos comentadas e likes postados-->
 				
 			</div>
 
