@@ -81,9 +81,15 @@
 	 								<span class="username" th:text="${row3.person.name}"></span>
 	 								<span class="text-muted pull-right" th:text="${row3.date}"></span>
 	 								<!-- /.username -->
-	 								<p>
-	 									<span th:text="${row3.mylike}"></span>
-	 								</p>
+									<p>
+										<div th:if="${row3.mylike} == true"> 
+											<i class="fa fa-thumbs-up"></i>
+										</div>
+										<div th:if="${row3.mylike} == false"> 
+											<i class="fa fa-thumbs-down"></i>
+										</div>									
+									</p>
+
 	 							</div>
 	 							<!-- /.comment-text -->
 	 						</div>
@@ -106,13 +112,22 @@
 				</div>
 					
 					<!-- Formulário de novo like no post -->
- 				<div class="box-footer" style="" th:if="${likes} != null">
+ 				<div class="box-footer" style="">
  					<div>
  					  <form enctype="application/x-www-form-urlencoded" th:object="${likes}" th:action="@{'/person/' + ${loginuser.person.id} + '/post/' + ${row.id} + '/likes'}" method="post">
  					    <img class="img-responsive img-circle img-sm" th:src="${'/upload/image/users/'+loginuserid}" alt="Alt Text"/>
  					    <!-- .img-push is used to add margin to elements next to floating images -->
  					    <div class="img-push">
- 					      <input type="text" class="form-control input-sm" th:field="*{mylike}" id="mylike" placeholder="Press enter to post like"/>
+ 					      
+ 					      <button type="submit" class="btn btn-default btn-xs">
+								<input type="hidden" id="mylike" name="mylike" value="true"></input>
+								<i class="fa fa-thumbs-o-up"></i> Like
+							</button>
+							<button type="submit" class="btn btn-default btn-xs">
+								<input type="hidden" id="mylike" name="mylike" value="false"></input>
+								<i class="fa fa-thumbs-o-down"></i> Unlike
+							</button>
+ 					      
  					    </div>
  					  </form>
  				  	</div>
