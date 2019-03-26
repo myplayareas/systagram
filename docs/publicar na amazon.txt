@@ -1,0 +1,41 @@
+Caso você queira publicar na sua infraestrutura ASW basta alterar o protótipo com os seguintes passos: 
+
+1. Crie uma instância do Ubuntu 18 no EC2 com as portas 80, 22, 8080 liberadas para qualquer IP.
+
+2. Instale o MariaDB nessa instância criada no item 1. 
+
+obs: a configuração do root dever ser a mesma do application.properties disponível em systagram/src/main/resources/application.properties
+
+3. Crie o banco e restaure o banco seguindo as orientações do Readme.txt do systagram
+
+4. Crie um bucket no S3 com a seguinte estrutura: 
+nome-do-bucket
+|-users
+|-uploads
+|--pictures
+
+Essas pastas do bucket devem ter acesso de leitura para todos os usuários
+
+5. Copie o conteúdo dos diretórios users, uploads/pictures do repositório do systagram para os referidos diretórios do bucket criado no item 4. Com isso, os usuários e as figuras já salvas no protótipo vão aparecer quando a aplicação for iniciada on-line.
+
+6. Faça o clone do repositório systagram na instância criada no item 1. 
+
+7. Antes de compilar a aplicação é preciso atualizar a classe Constantes.java com o id, chave de acesso e também com o nome do bucket criado no item 4. 
+
+Obs: atualize os seguintes dados na classe Contantes (systagram/src/main/java/br/ufc/great/sysadmin/util/Constantes.java): 
+
+public static String access_key_id = "?";
+public static String secret_key_id = "?";
+public static String s3awsurl = "https://s3.amazonaws.com/systagram-uploads/";
+public static String bucketPrincipal = "systagram-uploads"; 
+
+8. Compile as classes com o maven a partir do diretório raiz do repositorio systagram: 
+a)$ mvn clean
+b)$ mvn test
+
+9. Execute a aplicação principal do Spring boot: 
+$mvn spring-boot:run
+
+Recomendo fazer os testes do protótipo em uma janela privada do browser, pois estou enfrentando alguns problemas para gerenciar as sessões dos usuários. 
+
+teste: http://IP-DA-INSTANCIA:8080
