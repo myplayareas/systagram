@@ -12,7 +12,6 @@ public class Constantes {
 	
 	public static String access_key_id = "";
 	public static String secret_key_id = "";
-	public static String s3awsurl = "https://s3.amazonaws.com/systagram-uploads/";
-	public static String bucketPrincipal = "systagram-uploads";
-
+	public static String s3awsurl = "https://s3.amazonaws.com/systagram-uploads-teste/";
+    public static String bucketPrincipal = "systagram-uploads-teste";
 }

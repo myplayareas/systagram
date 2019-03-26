@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.ufc.great.sysadmin.model.Comment;
+import br.ufc.great.sysadmin.model.Likes;
 import br.ufc.great.sysadmin.model.Person;
 import br.ufc.great.sysadmin.model.Picture;
 import br.ufc.great.sysadmin.model.Post;
 import br.ufc.great.sysadmin.model.Users;
 import br.ufc.great.sysadmin.service.CommentService;
+import br.ufc.great.sysadmin.service.LikesService;
 import br.ufc.great.sysadmin.service.PersonService;
 import br.ufc.great.sysadmin.service.PictureService;
 import br.ufc.great.sysadmin.service.PostService;
@@ -39,6 +41,7 @@ public class PersonController {
 	private CommentService commentService;
 	private PictureService pictureService;
 	private PostService postService;
+	private LikesService likesService;
 	
 	@Autowired
 	private MySessionInfo mySessionInfo;
@@ -69,6 +72,10 @@ public class PersonController {
     	this.userService = userService;
     }
 	
+    @Autowired
+    public void setLikesService(LikesService likesService) {
+    	this.likesService = likesService;
+    }
     /**
      * Atualiza os dados do usuario logado
      */
@@ -424,5 +431,172 @@ public class PersonController {
 		return "redirect:/person/"+ personPost.getId() + "/post";
 	}
 	
+	/**
+     * Dada uma pessoa, retorna todos os likes que ela fez
+     * @param id Id de pessoa
+     * @param model Model do View
+     * @return listMyLikes.html
+     */
+    @RequestMapping(value="/person/{id}/likes")
+    public String listMyLikes(@PathVariable Long id, Model model) {
+    	Person person = this.personService.get(id);
+    	List<Likes> likes = new LinkedList<Likes>();
 
+     	likes = person.getLikes();
+    	checkUser();
+
+     	model.addAttribute("list", likes);
+    	model.addAttribute("loginusername", loginUser.getUsername());
+    	model.addAttribute("loginemailuser", loginUser.getEmail());
+    	model.addAttribute("loginuserid", loginUser.getId());
+    	model.addAttribute("loginuser", loginUser);
+
+         return "person/listMyLikes";
+
+     }
+	
+    /**
+     * Retorna todos os comentários de todas as pessoas
+     * @param model Model
+     * @return listComments.html
+     */
+    @RequestMapping(value="/person/likes")
+    public String listAllLikes(Model model) {
+    	List<Likes> likes = this.likesService.getAll();
+
+     	checkUser();
+    	model.addAttribute("list", likes);
+    	model.addAttribute("loginusername", loginUser.getUsername());
+    	model.addAttribute("loginemailuser", loginUser.getEmail());
+    	model.addAttribute("loginuserid", loginUser.getId());
+    	model.addAttribute("loginuser", loginUser);
+
+     	return "person/listLikes";
+    }
+    
+    /**
+     * Dada uma pessoa e um novo like mostra o formulário para inserir comentário
+     * @param id Id da pessoa
+     * @param model Model
+     * @return formLike.html
+     */
+    @RequestMapping(value="/person/{id}/likes/add")
+    public String addMyLike(@PathVariable Long id, Model model) {
+    	checkUser();
+    	Person person = this.personService.get(id);
+    	List<Likes> likes = person.getLikes();
+
+     	model.addAttribute("person", person);
+    	model.addAttribute("likes", likes);
+    	model.addAttribute("like", new Likes());
+    	model.addAttribute("loginusername", loginUser.getUsername());
+    	model.addAttribute("loginemailuser", loginUser.getEmail());
+    	model.addAttribute("loginuserid", loginUser.getId());
+    	model.addAttribute("loginuser", loginUser);
+
+     	return "person/formLikes";
+    }
+    
+    /**
+     * Dada uma pessoa e um like, salva esse like na lista de likes da pessoa
+     * @param id Id da Pessoa
+     * @param like Novo like
+     * @param ra mensagem flash de retorno
+     * @return listMyLikes.html
+     */
+    @RequestMapping(value="/person/{id}/likes/save", method=RequestMethod.POST)
+    public String saveMyLike(@PathVariable Long id, Likes like, final RedirectAttributes ra) {
+    	String local="";
+
+     	Person person = this.personService.get(id);
+    	person.addLike(like, person);
+    	//Atualiza a pessoa com o novo like
+    	this.personService.update(person);
+    	ra.addFlashAttribute("successFlash", "Like salvo com sucesso.");
+
+     	if (this.mySessionInfo.getAcesso().equals("ADMIN")) {
+    		local = "/person/likes";
+    	}else {
+    		local = "/person/"+id+"/likes";
+    	}
+
+     	return "redirect:"+local;
+    }
+    
+ 
+    /*
+ 	 * 1. Crie um like
+ 	 * 2. Faca o post do like passando o id do post 
+ 	 * 
+ 	 * /person/post/'} + ${row.id} + ${'/likes'
+ 	 * 
+ 	 * guarde a pessoa logada que está fazendo o like
+ 	 * salve esta pessoa no like
+ 	 * pegue a data corrente do like
+ 	 * salve a data corrente no like
+ 	 * 
+ 	 * salve o like no post
+ 	 * 
+ 	 * salve o post no repositório de posts
+ 	 *
+ 	 * redirecione para o listMyPost do usuário selecionado com todas as atualizaçòes
+ 	 */ 
+ 	@RequestMapping(value="/person/{personLogged}/post/{postId}/likes", method = RequestMethod.POST)
+ 	public String saveLikeInSelectedPost(Likes like, @PathVariable(value="postId") Long postId, 
+ 			@PathVariable(value="personLogged") Long personLogged, Model model, final RedirectAttributes ra) {
+
+  		//Pega o Post selecionado
+ 		Post post = this.postService.get(postId);
+ 		//Pega o Dono do post
+ 		Person personPost = post.getPerson();
+
+  		//Pessoa que vai fazer o like no post selecionado
+ 		Person personLike = this.personService.get(personLogged);
+
+  		//Recupera a data corrente do sistema
+ 		new ManipuladorDatas();
+ 		//Salva a data corrente no comment
+ 		like.setDate(ManipuladorDatas.getDate());
+
+  		//Adiciona o like no repositorio
+ 		this.likesService.save(like);
+
+  		//Adiciona o like no personLike
+ 		personLike.addLike(like, personLike);
+
+  		like.setPost(post);
+
+  		//Atualiza o like
+ 		this.likesService.update(like);
+
+  		//Atualiza o personLike
+ 		this.personService.update(personLike);
+
+  		//Adiciona o like no post
+ 		post.addLike(like);
+
+  		//Atualiza o post
+ 		this.postService.update(post);
+
+  		//Gera a lista de posts atualizada com o novo like
+ 		List<Post> list = personPost.getPosts();
+
+  		Comment newComment = new Comment();
+ 		Likes newLike = new Likes();
+
+  		model.addAttribute("person", personPost);
+ 		model.addAttribute("list", list);
+ 		model.addAttribute("comment", newComment);
+ 		model.addAttribute("likes", newLike);
+ 		model.addAttribute("loginusername", loginUser.getUsername());
+ 		model.addAttribute("loginemailuser", loginUser.getEmail());
+ 		model.addAttribute("loginuserid", loginUser.getId());
+ 		model.addAttribute("loginuser", loginUser);		
+
+  		ra.addFlashAttribute("successFlash", "O like foi salvo com sucesso.");
+
+  		return "redirect:/person/"+ personPost.getId() + "/post";
+ 	}
+
+	
 }
