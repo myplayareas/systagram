@@ -33,6 +33,8 @@ public class Person extends AbstractModel<Long>{
 	private List<Picture> pictures = new LinkedList<>();
 	@OneToMany(cascade=CascadeType.ALL)
 	private List<Post> posts = new LinkedList<>();
+	@OneToMany(cascade=CascadeType.ALL)
+	private List<Likes> likes = new LinkedList<>();
 
 	public Person() {
 	}
@@ -144,6 +146,19 @@ public class Person extends AbstractModel<Long>{
 
 	public void addPost(Post post) {
 		this.posts.add(post);
+	}
+
+	public List<Likes> getLikes() {
+		return likes;
+	}
+
+	public void setLikes(List<Likes> likes) {
+		this.likes = likes;
+	}
+	
+	public void addLike(Likes like, Person person) {
+		like.setPerson(person);
+		this.likes.add(like);
 	}
 	
 }

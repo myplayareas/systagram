@@ -1,0 +1,40 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sd="http://www.thymeleaf.org/spring-data" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
+<head>
+    <title>Likes do Usuário</title>
+</head>
+<body>
+<section layout:fragment="header">
+<h1>Likes do Usuário</h1>
+<ol class="breadcrumb">
+    <li><a href="/"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+    <li class="active">Likes do Usuário</li>
+</ol>
+</section>
+<div layout:fragment="content">
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title">Listagem</h3>
+        </div>
+        <div class="box-body no-padding">
+            <table class="table table-striped">
+                <tr>
+                    <th>Id</th>
+                    <th>Descrição</th>
+                    <th>Ações</th>
+                </tr>
+                <tr th:each="row : ${list}">
+                	<input id="id" name="id" th:value="${row.id}" type="hidden" />
+                	<td th:text="${row.id}"></td>                	
+                    <td th:text="${row.mylike}"></td>
+                    <td>
+                        <a th:href="${'/person/'+ loginuserid + '/likes/'+ row.id + '/edit/'}">editar</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

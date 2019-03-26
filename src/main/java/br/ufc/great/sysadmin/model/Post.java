@@ -14,6 +14,9 @@ public class Post extends AbstractModel<Long>{
 	private static final long serialVersionUID = 1L;
 	private Date date;
 	private int likes=0;
+	private int amountOfPositive;
+	private int amountOfNegative;
+	private int amountOfComments;
 
 	@OneToOne
 	private Person person;
@@ -21,6 +24,8 @@ public class Post extends AbstractModel<Long>{
 	private Picture picture;
 	@OneToMany(cascade=CascadeType.ALL)
 	private List<Comment> comments = new LinkedList<>();
+	@OneToMany(cascade=CascadeType.ALL)
+	private List<Likes> listLikes = new LinkedList<>();
 	
 	public Post() {
 	}
@@ -58,5 +63,64 @@ public class Post extends AbstractModel<Long>{
 	
 	public void addComment(Comment comment) {
 		this.getComments().add(comment);
+	}
+
+	public List<Likes> getListLikes() {
+		return listLikes;
+	}
+
+	public void setListLikes(List<Likes> listLikes) {
+		this.listLikes = listLikes;
+	}
+	
+	public void addLike(Likes like) {
+		this.getListLikes().add(like);
+	}
+		
+	public int getAmountOfPositive() {
+		List<Likes> likes = this.getListLikes();
+		int cont=0;
+		
+		for (Likes element : likes) {
+			if (element.isMylike()) {
+				cont++;
+			}
+		}
+		amountOfPositive = cont;
+		
+		return amountOfPositive;
+	}
+
+	public void setAmountOfPositive(int amountOfPositive) {
+		this.amountOfPositive = amountOfPositive;
+	}
+
+	public int getAmountOfNegative() {
+		List<Likes> likes = this.getListLikes();
+		int cont=0;
+		
+		for (Likes element : likes) {
+			if (!element.isMylike()) {
+				cont++;
+			}
+		}
+
+		amountOfNegative = cont;
+		
+		return amountOfNegative;
+	}
+
+	public void setAmountOfNegative(int amountOfNegative) {
+		this.amountOfNegative = amountOfNegative;
+	}
+
+	public int getAmountOfComments() {
+		amountOfComments = this.getComments().size();
+		
+		return amountOfComments;
+	}
+
+	public void setAmountOfComments(int amountOfComments) {
+		this.amountOfComments = amountOfComments;
 	}
 }
