@@ -72,21 +72,23 @@
 					</div>
 					<!-- /.box-footer -->
 					<!-- Lista de likes do Post -->
- 					<div th:each="row3 : ${row.listLikes}" class="box-footer box-comments" style="">
- 						<div class="box-comment">
- 							<!-- User image -->
- 							<img class="img-circle img-sm" th:src="${'/upload/image/users/'+row3.person.user.id}" alt="User Image" />
- 							<div class="comment-text">
- 								<span class="username" th:text="${row3.person.name}"></span>
- 								<span class="text-muted pull-right" th:text="${row3.date}"></span>
- 								<!-- /.username -->
- 								<p>
- 									<span th:text="${row3.mylike}"></span>
- 								</p>
- 							</div>
- 							<!-- /.comment-text -->
- 						</div>
- 						<!-- /.box-comment -->
+					<div th:if="${row.listLikes} != null">
+	 					<div th:each="row3 : ${row.listLikes}" class="box-footer box-comments" style="">
+	 						<div class="box-comment">
+	 							<!-- User image -->
+	 							<img class="img-circle img-sm" th:src="${'/upload/image/users/'+row3.person.user.id}" alt="User Image" />
+	 							<div class="comment-text">
+	 								<span class="username" th:text="${row3.person.name}"></span>
+	 								<span class="text-muted pull-right" th:text="${row3.date}"></span>
+	 								<!-- /.username -->
+	 								<p>
+	 									<span th:text="${row3.mylike}"></span>
+	 								</p>
+	 							</div>
+	 							<!-- /.comment-text -->
+	 						</div>
+	 						<!-- /.box-comment -->
+	 					</div>
  					</div>
  					<!-- /.box-footer -->
 					
@@ -104,7 +106,7 @@
 				</div>
 					
 					<!-- Formulário de novo like no post -->
- 				<div class="box-footer" style="">
+ 				<div class="box-footer" style="" th:if="${likes} != null">
  					<div>
  					  <form enctype="application/x-www-form-urlencoded" th:object="${likes}" th:action="@{'/person/' + ${loginuser.person.id} + '/post/' + ${row.id} + '/likes'}" method="post">
  					    <img class="img-responsive img-circle img-sm" th:src="${'/upload/image/users/'+loginuserid}" alt="Alt Text"/>
