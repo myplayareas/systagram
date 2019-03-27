@@ -92,7 +92,7 @@ public class FileUploadController {
 		model.addAttribute("loginuserid", loginUser.getId());
 		model.addAttribute("loginuser", loginUser);
 		
-		return "/uploads/listMypictures";
+		return "/uploads/listMyPictures";
 	}
 	
 	/**
@@ -217,7 +217,7 @@ public class FileUploadController {
 		model.addAttribute("loginuser", loginUser);
 		model.addAttribute("successFlash", "Successfully uploaded files " + fileNames.toString());
 
-		return "/uploads/listMypictures";
+		return "/uploads/listMyPictures";
 	}
 
 	/**
