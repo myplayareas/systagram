@@ -2,11 +2,25 @@ Caso você queira publicar na sua infraestrutura ASW basta alterar o protótipo 
 
 1. Crie uma instância do Ubuntu 18 no EC2 com as portas 80, 22, 8080 liberadas para qualquer IP.
 
-2. Instale o MariaDB nessa instância criada no item 1. 
+1.1 Lembre-se de instalar o jdk e o maven para poder compilar o código da aplicação.
 
-obs: a configuração do root dever ser a mesma do application.properties disponível em systagram/src/main/resources/application.properties
+1.2 Faça o clone do repositório do systagram. 
 
-3. Crie o banco e restaure o banco seguindo as orientações do Readme.txt do systagram
+2. Crie uma instância, preferencialmente na mesma VPN do EC2 do passo1, do RDS com o MariaDB. Lembre-se de liberar as portas 3306 e 22 para qualquer IP ter acesso. 
+
+2.1 Crie um banco de dados chamado dbsystagram. 
+
+3. Entre na instância do EC2 do item 1 e conecte na instância do RDS do item 2. 
+Exemplo: 
+$mysql -u root -p -h mydbsystagram.czgfwsbwfugv.us-east-1.rds.amazonaws.com
+
+Restaure o banco rodando o script restaura-dbsystagram.sql no RDS
+>use dbsystagram;
+>source scripts/sql/restaura-dbsystagram.sql
+
+3.1. Na instância do EC2 altere o arquivo application.properties para apontar para o novo banco restaurado do RDS
+
+Obs: a configuração do root dever ser a mesma do application.properties disponível em systagram/src/main/resources/application.properties
 
 4. Crie um bucket no S3 com a seguinte estrutura: 
 nome-do-bucket
@@ -14,13 +28,11 @@ nome-do-bucket
 |-uploads
 |--pictures
 
-Essas pastas do bucket devem ter acesso de leitura para todos os usuários
+Obs: Essas pastas do bucket devem ter acesso de leitura para todos os usuários.
 
 5. Copie o conteúdo dos diretórios users, uploads/pictures do repositório do systagram para os referidos diretórios do bucket criado no item 4. Com isso, os usuários e as figuras já salvas no protótipo vão aparecer quando a aplicação for iniciada on-line.
 
-6. Faça o clone do repositório systagram na instância criada no item 1. 
-
-7. Antes de compilar a aplicação é preciso atualizar a classe Constantes.java com o id, chave de acesso e também com o nome do bucket criado no item 4. 
+6. Antes de compilar a aplicação é preciso atualizar a classe Constantes.java com o id, chave de acesso e também com o nome do bucket criado no item 4. 
 
 Obs: atualize os seguintes dados na classe Contantes (systagram/src/main/java/br/ufc/great/sysadmin/util/Constantes.java): 
 
@@ -29,11 +41,11 @@ public static String secret_key_id = "?";
 public static String s3awsurl = "https://s3.amazonaws.com/systagram-uploads/";
 public static String bucketPrincipal = "systagram-uploads"; 
 
-8. Compile as classes com o maven a partir do diretório raiz do repositorio systagram: 
+7. Compile as classes com o maven a partir do diretório raiz do repositorio systagram: 
 a)$ mvn clean
 b)$ mvn test
 
-9. Execute a aplicação principal do Spring boot: 
+8. Execute a aplicação principal do Spring boot: 
 $mvn spring-boot:run
 
 Recomendo fazer os testes do protótipo em uma janela privada do browser, pois estou enfrentando alguns problemas para gerenciar as sessões dos usuários. 
