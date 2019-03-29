@@ -5,6 +5,10 @@
 	layout:decorator="layout">
 <head>
 <title>Meus Posts</title>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 </head>
 <body>
 	<section layout:fragment="header">
@@ -15,6 +19,29 @@
 		</ol>
 	</section>
 	<div layout:fragment="content">
+	
+		<div class="box box-default">
+		<div class="box-header with-border">
+	
+			<div>
+				<label>Intervalo:</label>
+				<input type="text" name="dates" class="form-control pull-left"/>
+				<script>
+					$(function() {
+				 		$('input[name="dates"]').daterangepicker({ startDate: moment(), endDate: moment().add(2, 'day')});
+					})
+				</script>
+			</div>
+	
+		</div>
+		<!-- /.box-header -->
+		<div class="box-body">
+			Faz a busca nas postagens registrados
+		</div>
+		<!-- /.box-body -->
+	</div>	
+	
+	
 		<div class="box">
 			<div class="box-header with-border">
 				<h3 class="box-title">Listagem</h3>
@@ -135,6 +162,7 @@
 			</div>
 
 		</div>
+		
 	</div>
 </body>
 </html>
