@@ -43,6 +43,25 @@
             </table>
         </div>
 
+ 		<div class="box box-default">
+			<div class="box-header with-border">
+				<h3 class="box-title">Pesquisa</h3>
+				
+				<form enctype="application/x-www-form-urlencoded" method="post" th:action="${'/users/search'}">
+						<div>
+							<input type="text" class="form-control input-sm" placeholder="Search..." name="search" id="search"/> 
+							<span class="glyphicon glyphicon-search form-control-feedback"></span>
+						</div>
+				</form>
+										<!-- /.box-tools -->
+			</div>
+		<!-- /.box-header -->
+			<div class="box-body">
+				Faz a busca nos usuários registrados
+			</div>
+			<!-- /.box-body -->
+		</div>
+
     </div>
 </div>
 </body>
