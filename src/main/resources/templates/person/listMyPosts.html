@@ -22,15 +22,16 @@
 	
 		<div class="box box-default">
 		<div class="box-header with-border">
-	
 			<div>
-				<label>Intervalo:</label>
-				<input type="text" name="dates" class="form-control pull-left"/>
-				<script>
-					$(function() {
-				 		$('input[name="dates"]').daterangepicker({ startDate: moment(), endDate: moment().add(2, 'day')});
-					})
-				</script>
+				<form enctype="application/x-www-form-urlencoded" method="post" th:action="${'/person/'} + ${person.id} + ${'/post/search'}">
+					<label>Intervalo:</label>
+					<input type="text" name="dates" class="form-control input-sm pull-left" id="dates"/>
+					<script>
+						$(function() {
+					 		$('input[name="dates"]').daterangepicker({ startDate: moment(), endDate: moment().add(2, 'day')});
+						})
+					</script>
+				</form>
 			</div>
 	
 		</div>

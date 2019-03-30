@@ -425,4 +425,25 @@ public class UserController {
 		return "/login";
 	}
 	
+	@RequestMapping(value="/users/search", method=RequestMethod.POST)
+	public String search(Model model, @RequestParam("search") String search, final RedirectAttributes ra) {
+		Users userExists = this.userService.getUserByUserName(search);
+		
+		if (userExists == null) {
+			ra.addFlashAttribute("errorFlash", "Usuário " + search +  " pesquisado não existe!");
+			return "redirect:/users/list";
+		}
+		
+    	checkUser();
+    	
+        model.addAttribute("list", userExists);
+        model.addAttribute("loginusername", loginUser.getUsername());
+    	model.addAttribute("loginemailuser", loginUser.getEmail());
+    	model.addAttribute("loginuserid", loginUser.getId());
+    	model.addAttribute("loginuser", loginUser);
+        
+        return "users/listAllUsers";
+	
+	}
+	
 }

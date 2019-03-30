@@ -1,5 +1,6 @@
 package br.ufc.great.sysadmin.model;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -8,6 +9,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+
+import br.ufc.great.sysadmin.util.ManipuladorDatas;
 
 @Entity
 public class Person extends AbstractModel<Long>{
@@ -159,6 +162,20 @@ public class Person extends AbstractModel<Long>{
 	public void addLike(Likes like, Person person) {
 		like.setPerson(person);
 		this.likes.add(like);
+	}
+	
+	public List<Post> getPostByDateFromTo(Date from , Date to){
+		List<Post> myPosts = this.getPosts();
+		List<Post> posts = new LinkedList<>();
+		
+		for (Post element : myPosts) {
+			Date date = element.getDate(); 
+			if (new ManipuladorDatas().dateIsBetweenDates(date, from, to)) {
+				posts.add(element);
+			}
+		}
+		
+		return posts;
 	}
 	
 }
