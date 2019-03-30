@@ -638,6 +638,7 @@ public class PersonController {
 		model.addAttribute("loginuserid", loginUser.getId());
 		model.addAttribute("loginuser", loginUser);		
 		model.addAttribute("person", person);
+		model.addAttribute("s3awsurl", new Constantes().s3awsurl);
 
 		return "/person/listMyPosts";
 	}
