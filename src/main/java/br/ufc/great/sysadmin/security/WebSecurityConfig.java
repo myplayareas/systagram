@@ -39,7 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/accesscontrol/**").hasAnyAuthority("ADMIN")
                 .antMatchers("/users").hasAnyAuthority("ADMIN")
-                .antMatchers("/users/").hasAnyAuthority("ADMIN")
+                .antMatchers("/users/**").hasAnyAuthority("ADMIN")
                 .antMatchers("/db/**").access("hasRole('ADMIN') and hasRole('DBA')")
                 .antMatchers("/dashboard/admin").hasAnyAuthority("ADMIN")
                 .antMatchers("/dashboard/user").hasAnyAuthority("USER")

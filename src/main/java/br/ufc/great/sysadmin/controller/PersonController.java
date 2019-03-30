@@ -1,5 +1,6 @@
 package br.ufc.great.sysadmin.controller;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.ufc.great.sysadmin.model.Comment;
@@ -303,6 +305,7 @@ public class PersonController {
 		model.addAttribute("loginuserid", loginUser.getId());
 		model.addAttribute("loginuser", loginUser);
 		model.addAttribute("s3awsurl", new Constantes().s3awsurl);
+		model.addAttribute("person", person);
 
 		return "/person/listMyPosts";
 	}
@@ -598,5 +601,45 @@ public class PersonController {
   		return "redirect:/person/"+ personPost.getId() + "/post";
  	}
 
+ 	@RequestMapping(value="/person/{id}/post/search", method = RequestMethod.POST)
+	public String searchMyPosts(Model model, @PathVariable Long id, @RequestParam("dates") String dates, final RedirectAttributes ra) {
+
+		String[] original = dates.split("-");
+		String originalFrom = original[0].trim();
+		String originalTo = original[1].trim();
+
+		Date from = new Date(originalFrom);
+		Date to = new Date(originalTo);
+
+		Person person = this.personService.get(id);
+
+		if (person.getPosts().size() == 0) {
+			ra.addFlashAttribute("errorFlash", "O usuário " + person.getName() + " ainda não possui posts!");
+			return "redirect:/users/list";
+		}
+
+		List<Post> list = person.getPostByDateFromTo(from, to);
+
+		if (list.size() == 0) {
+			ra.addFlashAttribute("errorFlash", "Não existe(m) post(s) nas datas passadas!");
+			return "redirect:/users/list";
+		}
+
+		checkUser();
+
+		Comment comment = new Comment();
+		Likes likes = new Likes();
+
+		model.addAttribute("list", list);
+		model.addAttribute("comment", comment);
+		model.addAttribute("likes", likes);
+		model.addAttribute("loginusername", loginUser.getUsername());
+		model.addAttribute("loginemailuser", loginUser.getEmail());
+		model.addAttribute("loginuserid", loginUser.getId());
+		model.addAttribute("loginuser", loginUser);		
+		model.addAttribute("person", person);
+
+		return "/person/listMyPosts";
+	}
 	
 }

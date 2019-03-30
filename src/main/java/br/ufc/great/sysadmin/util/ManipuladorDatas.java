@@ -29,4 +29,8 @@ public class ManipuladorDatas {
 		return date;
 	}
 	
+	public boolean dateIsBetweenDates(Date d, Date min, Date max) {
+		return d.compareTo(min) >= 0 && d.compareTo(max) <= 0;
+	}
+	
 }
