@@ -6,13 +6,13 @@
 <title>Dashboard</title>
 </head>
 <body>
-<section layout:fragment="header">
-<h1>Dashboard</h1>
-<ol class="breadcrumb">
-    <li><a href="/"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-    <li class="active">Dashboard</li>
-</ol>
-</section>
+	<section layout:fragment="header">
+		<h1>Dashboard</h1>
+		<ol class="breadcrumb">
+			<li><a href="/"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+			<li class="active">Dashboard</li>
+		</ol>
+	</section>
 
 	<div layout:fragment="content">
 		<div class="box box-default">
@@ -32,7 +32,6 @@
 			<!-- /.box-body -->
 		</div>
 		<!-- /.box -->
-
 		<p class="lead">Dashboard Administrativo</p>
 
 		<div class="row">
@@ -51,10 +50,12 @@
 			<div class="col-md-3 col-sm-6 col-xs-12">
 				<div class="info-box">
 					<!-- Apply any bg-* class to to the icon to color it -->
-					<span class="info-box-icon bg-green"><i class="fa fa-file-image-o"></i></span>
+					<span class="info-box-icon bg-green"><i
+						class="fa fa-file-image-o"></i></span>
 					<div class="info-box-content">
-						<span class="info-box-text">Minhas Fotos</span> 
-						<span class="info-box-number" th:text="${totalPictures}"></span>
+						<span class="info-box-text"><a
+							th:href="${'/upload/person/'} + ${loginuser.person.id} + ${'/picture'}">Minhas
+								Fotos</a></span> <span class="info-box-number" th:text="${totalPictures}"></span>
 					</div>
 					<!-- /.info-box-content -->
 				</div>
@@ -66,19 +67,20 @@
 					<!-- Apply any bg-* class to to the icon to color it -->
 					<span class="info-box-icon bg-blue"><i class="fa fa-star-o"></i></span>
 					<div class="info-box-content">
-						<span class="info-box-text">Meus posts</span> 
-						<span class="info-box-number" th:text="${totalPosts}"></span>
+						<span class="info-box-text"><a
+							th:href="${'/person/'} + ${loginuser.person.id} + ${'/post'}">Meus
+								posts</a></span> <span class="info-box-number" th:text="${totalPosts}"></span>
 					</div>
 					<!-- /.info-box-content -->
 				</div>
 				<!-- /.info-box -->
 			</div>
-			
-			
+
 			<div class="col-md-3 col-sm-6 col-xs-12">
 				<div class="info-box">
 					<!-- Apply any bg-* class to to the icon to color it -->
-					<span class="info-box-icon bg-purple"><i class="fa fa-comments-o"></i></span>
+					<span class="info-box-icon bg-purple"><i
+						class="fa fa-comments-o"></i></span>
 					<div class="info-box-content">
 						<span class="info-box-text">Meus comentários</span> <span
 							class="info-box-number" th:text="${totalComments}"></span>
@@ -87,164 +89,212 @@
 				</div>
 				<!-- /.info-box -->
 			</div>
-			
 
+		</div>
+
+		<div class="row">
+		
+			<!-- Meus posts -->
+			<!-- Lista com as fotos comentadas -->
+			<div class="col-md-8">
+				<div class="box box-widget">
+					<div class="box-header with-border">
+						<h3 class="box-title">
+						<a th:href="${'/person/'} + ${loginuser.person.id} + ${'/post'}">Meus Posts</a>
+						</h3>
+						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-box-tool" data-widget="collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button type="button" class="btn btn-box-tool" data-widget="remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+						<!-- /.box-tools -->
+						<!-- Conteudo do Widged -->
+						<!-- <div>  -->
+									<!-- Lista com as fotos comentadas -->
+									<div th:each="row : ${list}">
+										<!-- Box Comment -->
+										<div class="box-header with-border">
+											<div class="user-block">
+												<img class="img-circle" th:src="${'/upload/image/users/'+row.person.user.id}" alt="User Image" /> 
+													<span class="username"> <a href="#" th:text="${row.person.name}"></a></span> 
+													<span class="description" th:text="${row.date}"> </span>
+											</div>
+											<!-- /.user-block -->
+										</div>
+										<!-- /.box-header -->
+
+										<!-- Imagem do Post -->
+										<div class="box-body" style="">
+											<img class="img-responsive pad" alt="Image" th:src="${'/upload/picture/'} + ${row.picture.systemName}" />
+											<br></br> 
+												<span class="description" th:text="${row.picture.name}"></span>
+											<ul class="list-inline">
+												<li>
+													<a href="#" class="link-black text-sm" shape="rect"><i class="fa fa-thumbs-o-up margin-r-5"></i> 
+													Like (<spam th:text="${row.amountOfPositive}"></spam>)
+													</a>
+												</li>
+												<li>
+													<a href="#" class="link-black text-sm" shape="rect">
+														<i class="fa fa-thumbs-o-down margin-r-5"></i> 
+														Unlike (<spam th:text="${row.amountOfNegative}"></spam>)
+													</a>
+												</li>
+												<li class="pull-right">
+													<a href="#" class="link-black text-sm" shape="rect">
+														<i class="fa fa-comments-o margin-r-5"></i> 
+														Comments (<spam th:text="${row.amountOfComments}"></spam>)
+													</a>
+												</li>
+											</ul>
+										</div>
+										<!-- Fim da Imagem do Post -->
+
+										<!-- Lista dos comentarios do Post -->
+										<div th:each="row2 : ${row.comments}" class="box-footer box-comments" style="">
+											<div class="box-comment">
+												<!-- User image -->
+												<img class="img-circle img-sm" th:src="${'/upload/image/users/'+row2.person.user.id}" alt="User Image" />
+												<div class="comment-text">
+													<span class="username" th:text="${row2.person.name}"></span>
+													<span class="text-muted pull-right" th:text="${row2.date}"></span>
+													<!-- /.username -->
+													<p>
+														<span th:text="${row2.description}"></span>
+													</p>
+												</div>
+												<!-- /.comment-text -->
+											</div>
+											<!-- /.box-comment -->
+										</div>
+										<!-- Final da lista dos comentarios -->
+
+										<!-- Lista de likes do Post -->
+										<div th:each="row3 : ${row.listLikes}" class="box-footer box-comments" style="">
+											<div class="box-comment">
+												<!-- User image -->
+												<img class="img-circle img-sm" th:src="${'/upload/image/users/'+row3.person.user.id}" alt="User Image" />
+												<div class="comment-text">
+													<span class="username" th:text="${row3.person.name}"></span>
+													<span class="text-muted pull-right" th:text="${row3.date}"></span>
+													<!-- /.username -->
+														<div th:if="${row3.mylike} == true">
+															<i class="fa fa-thumbs-up"></i>
+														</div>
+														<div th:if="${row3.mylike} == false">
+															<i class="fa fa-thumbs-down"></i>
+														</div>
+												</div>
+												<!-- /.comment-text -->
+											</div>
+											<!-- /.box-comment -->
+										</div>
+										<!-- /.box-footer -->
+										<!-- Final da lista de likes do Post -->									
+
+									</div>
+									<!-- Final da Lista com as fotos comentadas e likes -->
+						<!--  </div>  -->
+						<!-- Fim do conteudo do Widged -->
+						<div class="box-footer text-center" style="">
+							<a th:href="${'/person/'} + ${loginuser.person.id} + ${'/post'}" class="uppercase">Visualiar todos os posts</a>
+						</div>
+						<!-- /.box-footer -->
+						
+					</div>
+				</div>
+			<!-- </div>  -->
+			<!-- Final da Lista com as fotos comentadas -->
+			<!-- Fim dos meus Posts -->
+		
+			<!-- Lista dos usuários -->
+			<div class="col-md-4">
+				<!-- USERS LIST -->
+				<div class="box box-danger">
+					<div class="box-header with-border">
+						<h3 class="box-title">Usuários</h3>
+
+						<div class="box-tools pull-right">
+							<span class="label label-danger" th:text="${totalUsers}">Usuários</span>
+							<button type="button" class="btn btn-box-tool"
+								data-widget="collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button type="button" class="btn btn-box-tool"
+								data-widget="remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<!-- /.box-header -->
+					<div class="box-body no-padding" style="">
+						<ul class="users-list clearfix">
+							<li th:each="user : ${listUsers}"><input id="id" name="id"
+								th:value="${user.id}" type="hidden" /> <img alt="Image"
+								th:src="${'/upload/image/users/'+user.id}" width="128"
+								height="128" /> <a class="users-list-name"
+								th:href="${'/users/about/' + user.id}"><spam
+										th:text="${user.username}"></spam></a></li>
+						</ul>
+						<!-- /.users-list -->
+					</div>
+					<!-- /.box-body -->
+					<div class="box-footer text-center" style="">
+						<a href="/users/list" class="uppercase">Visualizar todos os usuários</a>
+					</div>
+					<!-- /.box-footer -->
+				</div>
+				<!-- Fina da lista dos usuários -->
+
+				<!-- Inicio da lista de imagens -->
+				<div class="box box-primary">
+					<div class="box-header with-border">
+						<h3 class="box-title">Fotos do Usuário</h3>
+						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-box-tool"
+								data-widget="collapse">
+								<i class="fa fa-minus"></i>
+							</button>
+							<button type="button" class="btn btn-box-tool"
+								data-widget="remove">
+								<i class="fa fa-times"></i>
+							</button>
+						</div>
+					</div>
+					<div class="box-body" style="">
+						<ul class="products-list product-list-in-box">
+							<li class="item" th:each="picture : ${person.pictures}"><input
+								id="id" name="id" th:value="${picture.id}" type="hidden" />
+								<div class="product-img">
+									<img alt="Image" th:src="${'/upload/picture/'+picture.systemName}" width="50" height="50" />
+								</div>
+								<div class="product-info">
+									<a href="javascript:void(0)" class="product-title">
+										<span th:text="${picture.name}"></span>
+									</a>
+										<span class="product-description" th:text="${picture.path}"></span>
+								</div>
+							</li>
+						</ul>
+					</div>
+					<!-- /.box-body -->
+					<div class="box-footer text-center" style="">
+						<a
+							th:href="${'/upload/person/'} + ${loginuser.person.id} + ${'/picture'}"
+							class="uppercase">Visualiar todas as fotos</a>
+					</div>
+					<!-- /.box-footer -->
+				</div>
+				<!-- Final da lista de imagens -->
+			</div>
+			
 		</div>
 		
-		<div class="row">
-		<!-- Lista com as fotos comentadas -->		
-		<div class="col-md-8">
-          <!-- Box Comment -->
-          <div class="box box-widget">
-            <div class="box-header with-border">
-              <div class="user-block">
-                <img class="img-circle" src="../dist/img/user1-128x128.jpg" alt="User Image" />
-                <span class="username"><a href="#">Jonathan Burke Jr.</a></span>
-                <span class="description">Shared publicly - 7:30 PM Today</span>
-              </div>
-              <!-- /.user-block -->
-              <div class="box-tools">
-                <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="Mark as read">
-                  <i class="fa fa-circle-o"></i></button>
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div>
-              <!-- /.box-tools -->
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body" style="">
-              <img class="img-responsive pad" src="../dist/img/photo2.png" alt="Photo" />
-
-              <p>I took this photo this morning. What do you guys think?</p>
-              <button type="button" class="btn btn-default btn-xs"><i class="fa fa-share"></i> Share</button>
-              <button type="button" class="btn btn-default btn-xs"><i class="fa fa-thumbs-o-up"></i> Like</button>
-              <span class="pull-right text-muted">127 likes - 3 comments</span>
-            </div>
-            <!-- /.box-body -->
-            <div class="box-footer box-comments" style="">
-              <div class="box-comment">
-                <!-- User image -->
-                <img class="img-circle img-sm" src="../dist/img/user3-128x128.jpg" alt="User Image" />
-
-                <div class="comment-text">
-                      <span class="username">
-                        Maria Gonzales
-                        <span class="text-muted pull-right">8:03 PM Today</span>
-                      </span><!-- /.username -->
-                  It is a long established fact that a reader will be distracted
-                  by the readable content of a page when looking at its layout.
-                </div>
-                <!-- /.comment-text -->
-              </div>
-              <!-- /.box-comment -->
-              <div class="box-comment">
-                <!-- User image -->
-                <img class="img-circle img-sm" src="../dist/img/user4-128x128.jpg" alt="User Image" />
-
-                <div class="comment-text">
-                      <span class="username">
-                        Luna Stark
-                        <span class="text-muted pull-right">8:03 PM Today</span>
-                      </span><!-- /.username -->
-                  It is a long established fact that a reader will be distracted
-                  by the readable content of a page when looking at its layout.
-                </div>
-                <!-- /.comment-text -->
-              </div>
-              <!-- /.box-comment -->
-            </div>
-            <!-- /.box-footer -->
-            <div class="box-footer" style="">
-              <form action="#" method="post">
-                <img class="img-responsive img-circle img-sm" src="../dist/img/user4-128x128.jpg" alt="Alt Text" />
-                <!-- .img-push is used to add margin to elements next to floating images -->
-                <div class="img-push">
-                  <input type="text" class="form-control input-sm" placeholder="Press enter to post comment" />
-                </div>
-              </form>
-            </div>
-            <!-- /.box-footer -->
-          </div>
-          <!-- /.box -->
-        </div>
-		<!-- Final da Lista com as fotos comentadas -->
-
-		<!-- Lista dos usuários -->
-			<div class="col-md-4">
-              <!-- USERS LIST -->
-              <div class="box box-danger">
-                <div class="box-header with-border">
-                  <h3 class="box-title">Usuários</h3>
-
-                  <div class="box-tools pull-right">
-                    <span class="label label-danger" th:text="${totalUsers}">Usuários</span>
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
-                    </button>
-                  </div>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body no-padding" style="">
-                  <ul class="users-list clearfix">
-						<li th:each="user : ${listUsers}">
-							<input id="id" name="id" th:value="${user.id}" type="hidden" /> 
-							<img alt="Image" th:src="${'/upload/image/users/'+user.id}" width="128" height="128" /> 
-							<a class="users-list-name" href="#"><spam th:text="${user.username}"></spam></a>
-						</li>
-				  </ul>
-                  <!-- /.users-list -->
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer text-center" style="">
-                  <a href="javascript:void(0)" class="uppercase">Visualizar todos os usuários</a>
-                </div>
-                <!-- /.box-footer -->
-              </div>
-              <!-- Fina da lista dos usuários -->
-              <!--/.box -->
-                        
-		      <!-- Inicio da lista de imagens -->
-		    <div class="box box-primary">
-            <div class="box-header with-border">
-              <h3 class="box-title">Fotos do Usuário</h3>
-
-              <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body" style="">
-              <ul class="products-list product-list-in-box">
-                
-                <li class="item" th:each="picture : ${person.pictures}">
-					<input id="id" name="id" th:value="${picture.id}" type="hidden" />  
-						<div class="product-img">
-							<img alt="Image" th:src="${'/upload/picture/'+picture.systemName}" width="50" height="50" />
-						</div>
-						<div class="product-info">
-                    		<a href="javascript:void(0)" class="product-title"><span th:text="${picture.name}"></span></a>
-                    			<span class="product-description" th:text="${picture.path}">
-                          		</span>	
-                  		</div>
-				</li>
-                
-              </ul>
-            </div>
-            <!-- /.box-body -->
-            <div class="box-footer text-center" style="">
-              <a href="javascript:void(0)" class="uppercase">Visualiar todas as fotos</a>
-            </div>
-            <!-- /.box-footer -->
-      		</div>
-		      <!-- Final da lista de imagens -->
-		      
-		     </div>
-		</div>
-	</div>
+	</div> 
 
 </body>
 </html>

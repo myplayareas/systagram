@@ -150,6 +150,28 @@ public class UserController {
     }
 
     /**
+     * Mostra os detalhes do usuario selecionado
+     * @param id Id do Usuario
+     * @param model Dados do Usuario
+     * @return aboutUser.html
+     */
+    @RequestMapping("/users/about/{id}")
+    public String about(@PathVariable Long id, Model model) {
+		Users aboutUser = userService.get(id);
+		Person person = aboutUser.getPerson();
+		checkUser();
+		
+        model.addAttribute("user", aboutUser);
+		model.addAttribute("person", person);
+        model.addAttribute("loginusername", loginUser.getUsername());
+    	model.addAttribute("loginemailuser", loginUser.getEmail());
+    	model.addAttribute("loginuserid", loginUser.getId());
+    	model.addAttribute("loginuser", loginUser);
+    	
+        return "users/aboutUser";
+    }
+    
+    /**
      * Edita profile do usuário logado
      * @param id do usuario logado
      * @param model

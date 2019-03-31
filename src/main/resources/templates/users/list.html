@@ -40,6 +40,7 @@
                     <td>
                         <a th:href="${'/users/edit/' + row.id}">editar</a> -
                         <a th:href="${'/users/delete/' + row.id}">excluir</a>
+                        <a th:href="${'/person/' + row.person.id + '/post'}">posts</a>
                     </td>
                 </tr>
             </table>

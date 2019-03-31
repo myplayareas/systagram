@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import br.ufc.great.sysadmin.model.Person;
+import br.ufc.great.sysadmin.model.Post;
 import br.ufc.great.sysadmin.model.Users;
 import br.ufc.great.sysadmin.service.CommentService;
 import br.ufc.great.sysadmin.service.PictureService;
@@ -103,6 +105,10 @@ public class DashboardController {
     	acesso = mySessionInfo.getAcesso();
     	
     	List<Users> listUsers = this.userService.getAll();
+    	
+    	Person person = loginUser.getPerson();
+    	
+    	List<Post> list = person.getPosts();
     	    	
     	model.addAttribute("totalUsers", totalUsers);
     	model.addAttribute("totalComments", totalComments);
@@ -115,6 +121,7 @@ public class DashboardController {
     	model.addAttribute("person", loginUser.getPerson());
     	model.addAttribute("acesso", acesso);
     	model.addAttribute("loginuser", loginUser);
+    	model.addAttribute("list", list);
     	     	
         return "dashboard/index";
     }
@@ -127,11 +134,26 @@ public class DashboardController {
      */
     @RequestMapping("/dashboard/user")
     public String indexUser(Model model, Principal principal) {    	    	
-    	int totalUsers = (int) this.userService.count();    	
+    	int totalUsers = (int) this.userService.count();    
+    	int totalComments=0;
+    	int totalPictures=0;
+    	int totalPosts=0;
+
     	Users loginUser = mySessionInfo.getCurrentUser();
-    	    	
+
+    	totalComments = loginUser.getPerson().getComments().size();
+    	totalPictures = loginUser.getPerson().getPictures().size();
+    	totalPosts = loginUser.getPerson().getPosts().size();
+    	
     	acesso = mySessionInfo.getAcesso();
     	
+    	List<Users> listUsers = this.userService.getAll();
+
+    	model.addAttribute("totalUsers", totalUsers);
+    	model.addAttribute("totalComments", totalComments);
+    	model.addAttribute("totalPictures", totalPictures);
+    	model.addAttribute("totalPosts", totalPosts);
+    	model.addAttribute("listUsers", listUsers);
     	model.addAttribute("loginusername", loginUser.getUsername());
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
