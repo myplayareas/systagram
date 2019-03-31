@@ -29,6 +29,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     	http.sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
 
+    	http.sessionManagement()
+ 		.maximumSessions(2)
+ 		.expiredUrl("/sessionExpired");
+
+  		http.sessionManagement().invalidSessionUrl("/login");   
+
+  		http.sessionManagement()
+ 		  .sessionFixation().migrateSession();
+    	
     	http.authorizeRequests()                		
                 .antMatchers("/bootstrap/**").permitAll()
                 .antMatchers("/dist/**").permitAll()
@@ -39,7 +48,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/accesscontrol/**").hasAnyAuthority("ADMIN")
                 .antMatchers("/users").hasAnyAuthority("ADMIN")
-                .antMatchers("/users/**").hasAnyAuthority("ADMIN")
+                .antMatchers("/users/edit/").hasAnyAuthority("ADMIN")
+                .antMatchers("/users/**").authenticated()                
                 .antMatchers("/db/**").access("hasRole('ADMIN') and hasRole('DBA')")
                 .antMatchers("/dashboard/admin").hasAnyAuthority("ADMIN")
                 .antMatchers("/dashboard/user").hasAnyAuthority("USER")
@@ -53,20 +63,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
             .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .deleteCookies("auth_code", "JSESSIONID")
                 .invalidateHttpSession(true)
+                .deleteCookies("auth_code", "JSESSIONID")
                 .logoutSuccessUrl("/login")
                 .permitAll();   
-           	
-    	http.sessionManagement()
-    		.maximumSessions(2)
-    		.expiredUrl("/sessionExpired");
-    	
-    	http.sessionManagement().invalidSessionUrl("/invalidSession");   
-    	
-    	http.sessionManagement()
-    	  .sessionFixation().migrateSession();
-    	
     }
 
     @Autowired
