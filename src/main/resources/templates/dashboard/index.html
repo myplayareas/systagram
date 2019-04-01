@@ -227,17 +227,19 @@
                 <!-- /.box-header -->
                 <div class="box-body no-padding" style="">
                   <ul class="users-list clearfix">
-						<li th:each="user : ${listUsers}">
-							<input id="id" name="id" th:value="${user.id}" type="hidden" /> 
-							<img alt="Image" th:src="${s3awsurl+'users/'+user.id+'.png'}" width="128" height="128" /> 
-							<a class="users-list-name" href="#"><spam th:text="${user.username}"></spam></a>
-						</li>
-				  </ul>
+		<li th:each="user : ${listUsers}">
+			<input id="id" name="id" th:value="${user.id}" type="hidden" /> 
+				<img alt="Image" th:src="${'/upload/image/users/'+user.id}" width="128" height="128" /> 
+					<a class="users-list-name" th:href="${'/users/about/' + user.id}">
+					  <spam th:text="${user.username}"></spam>
+					</a>
+		</li>				
+		  </ul>
                   <!-- /.users-list -->
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer text-center" style="">
-                  <a href="javascript:void(0)" class="uppercase">Visualizar todos os usuários</a>
+                  <a href="/users/list" class="uppercase">Visualizar todos os usuários</a>
                 </div>
                 <!-- /.box-footer -->
               </div>
@@ -275,7 +277,9 @@
             </div>
             <!-- /.box-body -->
             <div class="box-footer text-center" style="">
-              <a href="javascript:void(0)" class="uppercase">Visualiar todas as fotos</a>
+             <a	th:href="${'/upload/person/'} + ${loginuser.person.id} + ${'/picture'}" class="uppercase">
+		     Visualiar todas as fotos
+	     </a>
             </div>
             <!-- /.box-footer -->
       		</div>
