@@ -1,9 +1,5 @@
 package br.ufc.great.sysadmin.controller;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.List;
 
@@ -16,6 +12,8 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 
+import br.ufc.great.sysadmin.model.Person;
+import br.ufc.great.sysadmin.model.Post;
 import br.ufc.great.sysadmin.model.Users;
 import br.ufc.great.sysadmin.service.CommentService;
 import br.ufc.great.sysadmin.service.PictureService;
@@ -113,6 +111,10 @@ public class DashboardController {
     	acesso = mySessionInfo.getAcesso();
     	
     	List<Users> listUsers = this.userService.getAll();
+    	
+    	Person person = loginUser.getPerson();
+
+      	List<Post> list = person.getPosts();
     	    	
     	model.addAttribute("totalUsers", totalUsers);
     	model.addAttribute("totalComments", totalComments);
@@ -125,6 +127,7 @@ public class DashboardController {
     	model.addAttribute("person", loginUser.getPerson());
     	model.addAttribute("acesso", acesso);
     	model.addAttribute("loginuser", loginUser);
+    	model.addAttribute("list", list);
     	model.addAttribute("s3awsurl", new Constantes().s3awsurl);
     	
     	/*
