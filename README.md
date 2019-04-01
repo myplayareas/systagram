@@ -1,5 +1,5 @@
 # SysTagram
-Aplicação para postar fotos e receber comentários. 
+Aplicação para postar fotos e receber comentários e likes. 
 
 Features
 ---
@@ -11,46 +11,72 @@ Features
 5. Gerenciar Fotos
 6. Gerenciar Posts 
 7. Gerenciar Comentários nos posts
+8. Gerenciar Likes nos posts
 
 Sobre as operações para execução da aplicação
 ---
 
-1. Faça o clone do repositório.
+O branch principal contem a aplicação apontando para os serviços da AWS. 
 
-2. Foi feita a atualização para o banco de dados MariaDB para garantir o funcionamento nas versões mais novas dos SO's.
+O branch likes contem a aplicação rodando em um ambiente local autocontido para testar as funcionalidades da aplicação em um ambiente local offline. 
 
-3. Crie o banco dbsystagram e aponte para o banco.
-```
-mysql> create database dbsystagram
-mysql> use dbsystagram
-```
+Caso você queira publicar na sua infraestrutura ASW basta alterar o protótipo com os seguintes passos: 
 
-4. Rode o script restaura-dbsystagram.sql para criar as tabelas com os dados de exemplo.
-```
-mysql> source scripts/sql/restaura-dbsystagram.sql
-```
+1. Crie uma instância do Ubuntu 18 no EC2 com as portas 80, 22, 8080 liberadas para qualquer IP.
 
-5. Usuário admin (armando) tem senha armando.
+1.1 Lembre-se de instalar o jdk e o maven para poder compilar o código da aplicação.
 
-6. Limpe o projeto via comando clean do maven.
+1.2 Faça o clone do repositório do systagram. 
+
+2. Crie uma instância, preferencialmente na mesma VPN do EC2 do passo1, do RDS com o MariaDB. Lembre-se de liberar as portas 3306 e 22 para qualquer IP ter acesso. 
+
+2.1 Crie um banco de dados chamado dbsystagram. 
+
+3. Entre na instância do EC2 do item 1 e conecte na instância do RDS do item 2. 
+Exemplo: 
 ```
-$mvn clean
+$mysql -u root -p -h mydbsystagram.x.y.rds.amazonaws.com
 ```
-7. Compile o projeto via modo teste do maven. 
+Restaure o banco rodando o script restaura-dbsystagram.sql no RDS
 ```
-$mvn test
+>use dbsystagram;
+>source scripts/sql/restaura-dbsystagram.sql
 ```
-8. Execute a classe principal (SystemApplication) do projeto via maven. 
+3.1. Na instância do EC2 altere o arquivo application.properties para apontar para o novo banco restaurado do RDS
+
+Obs: a configuração do root dever ser a mesma do application.properties disponível em systagram/src/main/resources/application.properties
+
+4. Crie um bucket no S3 com a seguinte estrutura: 
+nome-do-bucket
+|-users
+|-uploads
+|--pictures
+
+Obs: Essas pastas do bucket devem ter acesso de leitura para todos os usuários.
+
+5. Copie o conteúdo dos diretórios users, uploads/pictures do repositório do systagram para os referidos diretórios do bucket criado no item 4. Com isso, os usuários e as figuras já salvas no protótipo vão aparecer quando a aplicação for iniciada on-line.
+
+6. Antes de compilar a aplicação é preciso atualizar a classe Constantes.java com o id, chave de acesso e também com o nome do bucket criado no item 4. 
+
+Obs: atualize os seguintes dados na classe Contantes (systagram/src/main/java/br/ufc/great/sysadmin/util/Constantes.java): 
+
+public static String access_key_id = "?";
+public static String secret_key_id = "?";
+public static String s3awsurl = "https://s3.amazonaws.com/systagram-uploads/";
+public static String bucketPrincipal = "systagram-uploads"; 
+
+7. Compile as classes com o maven a partir do diretório raiz do repositorio systagram: 
+```
+$ mvn clean
+$ mvn test
+```
+8. Execute a aplicação principal do Spring boot: 
 ```
 $mvn spring-boot:run
 ```
-9. Para os ambientes POSIX, é possível integrar todos esses comandos no seguinte pipe:
-```
-$mvn clean && mvn test && mvn spring-boot:run
-```
+Recomendo fazer os testes do protótipo em uma janela privada do browser, pois estou enfrentando alguns problemas para gerenciar as sessões dos usuários. 
 
-Por padrão a aplicação roda em http://localhost:8080/login
-
+teste: http://IP-DA-INSTANCIA:8080
 
 Characteristics
 ---
@@ -60,11 +86,14 @@ Characteristics
 * Thymeleaf para view;
 * Mysql Database or others;
 * Basic entity crud;
+* AWS (Amazon Web Service)
+* EC2 (Elastic Compute Cloud)
+* RDS (Relational Database Service)
+* S3 (Simple Storage Service)
 
 TODO
 ---
 
-* Atualmente a aplicação aponta para o banco dbsysweb, com isso, é preciso fazer os ajustes de controle de autenticação necessários integrar ao banco demo da aplicação restapi https://github.com/topicos-sistemas-distribuidos/restapi. 
 * Search in the listing;
 * Model of Dialog;
 * Template for sending e-mail with template;
@@ -129,5 +158,7 @@ References
 [9] Mysql 5. Database Management System. Available at https://dev.mysql.com/downloads/mysql
 
 [10] AdminLTE. Control panel template for web applications. Available at https://adminlte.io/themes/AdminLTE/index.html
+
+[11]. AWS. Amazon Web Service. Available at https://aws.amazon.com/
 
 Questions, suggestions or any kind of criticism contact us by email armando@ufpi.edu.br
