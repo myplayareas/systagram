@@ -166,14 +166,15 @@ public class UserController {
 		Person person = aboutUser.getPerson();
 		checkUser();
 
-         model.addAttribute("user", aboutUser);
-		model.addAttribute("person", person);
+        model.addAttribute("user", aboutUser);
+	model.addAttribute("person", person);
         model.addAttribute("loginusername", loginUser.getUsername());
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
     	model.addAttribute("loginuser", loginUser);
-
-         return "users/aboutUser";
+	model.addAttribute("s3awsurl", new Constantes().s3awsurl);
+         
+	return "users/aboutUser";
     }
     
     /**
