@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+
 import br.ufc.great.sysadmin.model.Comment;
 import br.ufc.great.sysadmin.model.Likes;
 import br.ufc.great.sysadmin.model.Person;
@@ -28,6 +30,8 @@ import br.ufc.great.sysadmin.service.UsersService;
 import br.ufc.great.sysadmin.util.Constantes;
 import br.ufc.great.sysadmin.util.ManipuladorDatas;
 import br.ufc.great.sysadmin.util.MySessionInfo;
+import br.ufc.great.sysadmin.util.dynamodb.DynamoDBManipulator;
+import br.ufc.great.sysadmin.util.dynamodb.model.LikesDynamoDB;
 
 /**
  * Faz o controle do domínio de Controle de Acesso
@@ -516,6 +520,19 @@ public class PersonController {
     	//Atualiza a pessoa com o novo like
     	this.personService.update(person);
     	ra.addFlashAttribute("successFlash", "Like salvo com sucesso.");
+    	
+    	DynamoDBManipulator myDynamoDB = new DynamoDBManipulator();
+    	
+    	LikesDynamoDB myLikeDynamo = new LikesDynamoDB();
+    	
+    	myLikeDynamo.setId(like.getId().intValue());
+    	myLikeDynamo.setDate(like.getDate().toString());
+    	myLikeDynamo.setMylike((like.isMylike() ? 1:0 ));
+    	myLikeDynamo.setDescription("");
+    	myLikeDynamo.setPerson_id(person.getId().intValue());
+    	myLikeDynamo.setPost_id(like.getPost().getId().intValue());
+    
+    	myDynamoDB.saveItem(myLikeDynamo);
 
      	if (this.mySessionInfo.getAcesso().equals("ADMIN")) {
     		local = "/person/likes";
@@ -583,6 +600,22 @@ public class PersonController {
 
   		//Gera a lista de posts atualizada com o novo like
  		List<Post> list = personPost.getPosts();
+ 		
+ 		//Salva o like na referência de likes do DynamoDB
+    	DynamoDBManipulator myDynamoDB = new DynamoDBManipulator();
+
+    	//Mapeamento do Like para o Likes do DynamoDB
+    	LikesDynamoDB myLikeDynamo = new LikesDynamoDB();
+    	
+    	myLikeDynamo.setId(like.getId().intValue());
+    	myLikeDynamo.setDate(like.getDate().toString());
+    	myLikeDynamo.setMylike((like.isMylike() ? 1:0 ));
+    	myLikeDynamo.setDescription("");
+    	myLikeDynamo.setPerson_id(personLike.getId().intValue());
+    	myLikeDynamo.setPost_id(like.getPost().getId().intValue());
+    
+    	//Salva o registro do like no Likes do DynamoDB
+    	myDynamoDB.saveItem(myLikeDynamo);
 
   		Comment newComment = new Comment();
  		Likes newLike = new Likes();
