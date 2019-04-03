@@ -90,6 +90,7 @@ Characteristics
 * EC2 (Elastic Compute Cloud)
 * RDS (Relational Database Service)
 * S3 (Simple Storage Service)
+* DynamoDB (NoSQL database service)
 
 TODO
 ---
