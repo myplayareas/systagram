@@ -1,2 +1,3 @@
 #!/bin/bash
-mvn clean && mvn test && mvn spring-boot:run
+cd /home/ubuntu/tsd/systagram
+mvn spring-boot:run
