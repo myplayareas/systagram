@@ -78,6 +78,69 @@ Recomendo fazer os testes do protótipo em uma janela privada do browser, pois e
 
 teste: http://IP-DA-INSTANCIA:8080
 
+
+Garantindo que a aplicação será iniciada como um serviço
+---
+Para executar o serviço ao iniciar o servidor (Ubuntu): 
+
+1. Crie como root o arquivo rc.local em /etc
+```
+/etc/rc.local
+```
+
+2. Edit o arquivo rc.local via "sudo vim rc.local" com o seguinte conteudo
+```
+#!/bin/sh -e
+cd /home/ubuntu/tsd/systagram/
+sh /home/ubuntu/tsd/systagram/scripts/executa.sh || exit 1
+exit 0
+```
+
+3. Altere o grupo e as permissões do arquivo rc.local para o grupo root e permissão de leitura
+```
+sudo chown root /etc/rc.local
+sudo chmod 755 /etc/rc.local
+```
+
+4. Edite o serviço rc-local.service
+```
+sudo vi /etc/systemd/system/rc-local.service
+```
+
+5. Coloque o seguinte conteudo no rc-local.service
+```
+[Unit]
+ Description=/etc/rc.local Compatibility
+ ConditionPathExists=/etc/rc.local
+
+[Service]
+ Type=forking
+ ExecStart=/etc/rc.local start
+ TimeoutSec=0
+ StandardOutput=tty
+ RemainAfterExit=yes
+ SysVStartPriority=99
+
+[Install]
+ WantedBy=multi-user.target
+```
+
+6. Habilite o serviço re-local via systemctl
+```
+sudo systemctl enable rc-local.service
+```
+
+7. Por fim, faça os testes para checar se o serviço inicia e veja seu status via: 
+```
+sudo systemctl start rc-local.service
+sudo systemctl status rc-local.service
+```
+
+Observações: 
+- Para tirar a prova dos 9 reinicie o servidor e veja se o serviço realmente iniciou. 
+- Caso queira alterar o comportamento do script basta alterar os comandos do script /home/ubuntu/tsd/systagram/scripts/executa.sh
+
+
 Characteristics
 ---
 
