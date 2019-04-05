@@ -76,7 +76,7 @@ $mvn spring-boot:run
 ```
 Recomendo fazer os testes do protótipo em uma janela privada do browser, pois estou enfrentando alguns problemas para gerenciar as sessões dos usuários. 
 
-teste: http://IP-DA-INSTANCIA:8080
+teste: http://IP-DA-INSTANCIA
 
 
 Garantindo que a aplicação será iniciada como um serviço
@@ -141,6 +141,30 @@ Observações:
 - Caso queira alterar o comportamento do script basta alterar os comandos do script /home/ubuntu/tsd/systagram/scripts/executa.sh
 
 
+Criando um Esquema de Load Balancing e Auto Scaling na AWS
+---
+
+Para criar um esquema de Load Balancing e Auto Scaling os seguintes passos devem ser seguidos para criar um Balanceador iniciando com 2 instâncias do systagram e depois adicionando mais instâncias na medida que o consumo de processador superar 80%. Sendo para este exemplo o limite máximo de instância é de quatro instâncias. 
+
+1. Crie uma imagem do Systagram de acordo com a seção "operações para execução da aplicação".
+
+2. Crie o Load Balance via EC2 Dashboard -> Load Balancing -> Load Balancers 
+
+2.1 Faça a criação padrão, mas configure o controle de sessão do balanceador
+```
+Port Configuration
+80 (HTTP) forwarding to 80 (HTTP)
+Stickiness: LBCookieStickinessPolicy, expirationPeriod='300'
+```
+
+3. Crie o Launch Configuration padrão 
+
+4. Crie o Auto Scaling baseado na imagem criada no passo 1. Faça a linkagem com o balanceador de carga criado no passo 2. Nesse caso o auto scaling vai gerenciar de 2 a 4 instâncias baseado no consumo do processador. 
+
+5. Faça o teste do DNS do Balanceador criado no passo 2.  
+
+A versão de produção do Systagram foi inicialmente publicada em http://s3.amazonaws.com/systagram/index.html essa página aponta para o Balanceador de Carga publicado, e este redireciona as requisições para as instâncias ativas do Systagram.
+
 Characteristics
 ---
 
@@ -154,6 +178,8 @@ Characteristics
 * RDS (Relational Database Service)
 * S3 (Simple Storage Service)
 * DynamoDB (NoSQL database service)
+* Balanceamento de Carga via Load Balancing da AWS
+* Elasticidade (variando de 2 a 4 instâncias) via Auto Scaling da AWS
 
 TODO
 ---
