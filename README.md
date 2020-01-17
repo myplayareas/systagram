@@ -163,7 +163,7 @@ Stickiness: LBCookieStickinessPolicy, expirationPeriod='300'
 
 5. Faça o teste do DNS do Balanceador criado no passo 2.  
 
-A versão de produção do Systagram foi inicialmente publicada em http://s3.amazonaws.com/systagram/index.html essa página aponta para o Balanceador de Carga publicado, e este redireciona as requisições para as instâncias ativas do Systagram.
+A versão de produção do Systagram foi inicialmente publicada em http://s3.amazonaws.com/systagram/index.html essa página aponta para o Balanceador de Carga publicado, e este redireciona as requisições para as instâncias ativas do Systagram. Caso queira fazer um teste no ambiente de produção basta criar um usuário comum na própria aplicação ou enviar um e-mail para armando@ufpi.edu.br
 
 Characteristics
 ---
