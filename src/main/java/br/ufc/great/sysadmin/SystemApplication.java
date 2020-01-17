@@ -16,7 +16,7 @@ public class SystemApplication {
 
 	public static void main(String[] args) {
 		new Constantes();
-		String mainPath = "TBD";
+		String mainPath = System.getProperty("user.dir");
 		String uploadsPath = Constantes.uploadDirectory;
 		String picturesPath = Constantes.picturesDirectory;
 		String banco = "TBD";

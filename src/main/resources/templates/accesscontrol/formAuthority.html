@@ -2,8 +2,64 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
 <head>
     <title>Cadastro de Usuário</title>
+    <script type="text/javascript">
+  //<![CDATA[ 
+	<!-- Dado um conjunto de elementos selecionados remove esses elementos da selecao -->
+	<!-- Fonte: https://www.w3schools.com/jsref/met_select_remove.asp -->
+	<!-- Using JQuery https://paulund.co.uk/add-and-remove-options-in-select-using-jquery -->
+	function removeSelectedItem() {
+		  var myPermissoesSelect = document.getElementById("myPermissoes");
+		  myPermissoesSelect.remove(myPermissoesSelect.selectedIndex);
+		  getElementsCSV();
+	}
+	
+	function addSelectedItem(){
+		var myAcessoSelect = document.getElementById("myAcesso");
+		var selectedItemFromMyAcesso = myAcessoSelect.value;
+		
+		//Cria um novo elemento
+		var myOption = document.createElement("option");
+		myOption.text = selectedItemFromMyAcesso;
+		
+		var myPermissoesSelect = document.getElementById("myPermissoes");
+		
+		//percorre todos os elementos de myPermissoes
+		//checa se o elemento ainda não existe, então adiciona, se não mostra uma mensagem
+		var achou=false;
+		var i;
+	
+		for (i = 0; i < myPermissoesSelect.length; i++){
+			if (myOption.value == myPermissoesSelect.options[i].value){
+				alert("A permissão já foi adicionada!");
+				achou = true;
+				break;
+			}
+		}
+		
+		if (achou==false){
+			myPermissoesSelect.add(myOption);	
+		}
+		getElementsCSV();
+	}
+	
+	function getElementsCSV(){
+		var myStringCSV="";
+		var myPermissoesSelect = document.getElementById("myPermissoes");
+		
+		var i;
+		for(i = 0; i < myPermissoesSelect.length; i++){
+			myStringCSV = myStringCSV + myPermissoesSelect.options[i].value + ",";
+		}
+		myStringCSV = myStringCSV.substring(0,myStringCSV.length - 1);
+		document.getElementById("checkMyPermissoes").value = myStringCSV;
+	}
+		
+	//]]>
+</script>
+    
 </head>
-<body>
+<body onload="getElementsCSV();">
+
 <section layout:fragment="header">
     <h1>Permissões de Usuários</h1>
     <ol class="breadcrumb">
@@ -59,17 +115,26 @@
 							<option value="false">false</option>
 					</select>                    
                 </div>                
-                <div class="form-group">
-                    <label for="nome">Novo Acesso</label>                    
-                    <select class="form-control" name="nome" id="nome" required="true">
-							<option value="ADMIN">ADMIN</option>
-							<option value="USER">USER</option>
-					</select>
-                </div>
-                
+				<div >
+				    <label>Meus Acessos</label>
+				    <select multiple="" class="form-control" required="true" name="myPermissoes" id="myPermissoes">
+				        <option th:each="role : *{roles}" th:text="${role.nome}"></option>
+				    </select>
+				    <input type="hidden" name="checkMyPermissoes" id="checkMyPermissoes" value=""></input>
+				    <button type="button" onclick="removeSelectedItem();">Remove</button>
+				</div>
+				<div class="form-group">
+				      <label for="nome">Tipo de Acesso</label>                    
+				      <select class="form-control" name="myAcesso" id="myAcesso" required="true">
+				      	  <option th:each="authority : ${authoritieslist}" th:text="${authority.nome}"></option>
+					  </select>
+				      <button type="button" onclick="addSelectedItem();">Adiciona</button>
+				</div>
+				
             </div>
+            
             <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Salvar</button>
+                <button type="submit" class="btn btn-primary" onclick="getElementsCSV();">Salvar</button>
             </div>
         </form>
     </div>
@@ -77,5 +142,6 @@
 	</div>
 
 </div>
+
 </body>
 </html>
