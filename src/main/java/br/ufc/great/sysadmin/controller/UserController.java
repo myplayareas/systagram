@@ -266,22 +266,16 @@ public class UserController {
         		String novaSenhaCriptografada = new GeradorSenha().criptografa(newPassword);
         		user.setPassword(novaSenhaCriptografada);
                 Users save = userService.save(user);
-                ra.addFlashAttribute("successFlash", "Usuário " + user.getUsername() + " foi alterado com sucesso.");  		
+                ra.addFlashAttribute("successFlash", "Usuário " + user.getUsername() + " foi alterado com sucesso.");
+                
         	}else{
         		ra.addFlashAttribute("errorFlash", "A senha informada é diferente da senha original.");
         	}
     	}
     	else{
-            ra.addFlashAttribute("errorFlash", "A nova senha não foi confirmada.");
+            ra.addFlashAttribute("errorFlash", "A nova senha não foi confirmada."); 
     	}
-    	
-    	if (this.mySessionInfo.getAcesso().equals("ADMIN")) {
-    		local = "/users";
-    	}else {
-    		local = "/";
-    	}
-    	
-    	return "redirect:"+local;
+    	return "redirect:/users/edit/profile/"+user.getId();
     }
 
     /**
@@ -316,13 +310,7 @@ public class UserController {
     	this.personService.update(person);
 		ra.addFlashAttribute("successFlash", "Os dados pessoais do " + person.getUser().getUsername() + " foram alterados com sucesso.");
     	
-		if (this.mySessionInfo.getAcesso().equals("ADMIN")) {
-    		local = "/users";
-    	}else {
-    		local = "/";
-    	}
-    	
-    	return "redirect:"+local;
+		return "redirect:/users/edit/profile/"+person.getUser().getId();		
     }
 
     
