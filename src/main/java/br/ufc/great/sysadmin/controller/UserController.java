@@ -3,10 +3,14 @@ package br.ufc.great.sysadmin.controller;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -117,15 +121,15 @@ public class UserController {
     @RequestMapping("/users/add")
     public String add(Model model) {
     	checkUser();
-    	
-        model.addAttribute("user", new Users());
+    	Users user = new Users();
+        model.addAttribute("user", user);
         model.addAttribute("loginusername", loginUser.getUsername());
     	model.addAttribute("loginemailuser", loginUser.getEmail());
     	model.addAttribute("loginuserid", loginUser.getId());
     	model.addAttribute("loginuser", loginUser);
     	
         return "users/form";
-    }
+    }    
 
     /**
      * Edita um usuário selecionado
@@ -204,13 +208,29 @@ public class UserController {
      * @return pagina de usuarios com o novo usuario
      */
     @RequestMapping(value = "/users/save", method = RequestMethod.POST)
-    public String save(Users user, @RequestParam("password") String password, 
+    public String save(@Valid @ModelAttribute("user") Users user, BindingResult bindingResult, @RequestParam("password") String password, 
     		@RequestParam("confirmpassword") String confirmPassword, 
     		@RequestParam("nome") String authority, 
-    		final RedirectAttributes ra) {
+    		final RedirectAttributes ra, Model model) {
     	String senhaCriptografada;
     	List<Role> roles = new LinkedList<>();		
-    	
+
+    	/**
+    	 * Caso exista algum erro de entrada de dados vai para a página de listagem de usuários
+    	 */
+    	if (bindingResult.hasErrors()) {
+    		checkUser();
+            model.addAttribute("loginusername", loginUser.getUsername());
+        	model.addAttribute("loginemailuser", loginUser.getEmail());
+        	model.addAttribute("loginuserid", loginUser.getId());
+        	model.addAttribute("loginuser", loginUser);
+    		return "users/form";
+    	}
+
+    	/*
+    	 * Checa o tipo do usuário
+    	 * O usuário básico é o USER
+    	 */
     	switch (authoritiesService.checkAuthority(authority)) {
 		case "USER":
 			roles.add(authoritiesService.getRoleByNome("USER"));
@@ -220,7 +240,7 @@ public class UserController {
 			ra.addFlashAttribute("errorFlash", "A permissão não está registrada no sistema!");
 			break;
 		}
-    	
+    	    	
     	if (password.equals(confirmPassword)){
         	senhaCriptografada = new GeradorSenha().criptografa(password);
         	user.setPassword(senhaCriptografada);
@@ -233,7 +253,9 @@ public class UserController {
             ra.addFlashAttribute("successFlash", "Usuário foi salvo com sucesso.");
     	}else{
             ra.addFlashAttribute("errorFlash", "A senha do usuário NÃO confere.");
-    	}    	
+    	}  
+    	
+    	
     	return "redirect:/users";
     }
     

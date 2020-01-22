@@ -14,7 +14,7 @@
 <div layout:fragment="content">
     <div class="box">
         <div class="box-header with-border">
-            <h3 class="box-title">Formulário</h3>
+            <h3 class="box-title">Formulário Teste</h3>
             <div class="box-tools pull-right">
                 <a href="/users" type="button" class="btn btn-box-tool"><i class="fa fa-list-ul"></i></a>
             </div>
@@ -25,6 +25,7 @@
 
                 <div class="form-group">
                     <label for="Username">Username</label>
+                    <span class="has-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Name Error</span>
                     <input type="text" required="true" class="form-control" th:field="*{username}" id="username" />
                 </div>
                 <!-- 
@@ -35,10 +36,12 @@
                  -->
                 <div class="form-group">
                 	<label for="Username">E-mail</label>
+                	<span class="has-error" color="red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Username Error</span>
                 	<input type="text" required="true" class="form-control" th:field="*{email}" id="email" />
                 </div>
                 <div class="form-group">
                     <label for="Username">Senha</label>
+                    <span class="has-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">E-mail Error</span>
                     <input type="password" required="true" class="form-control" th:field="*{password}" name="password" id="password" />
                 </div>            
                 <div class="form-group">
@@ -46,7 +49,8 @@
                     <input type="password" required="true" class="form-control" name="confirmpassword" id="confirmpassword" />
                 </div>
 				<div class="form-group">
-						<label for="Ativo">Ativo</label> 
+						<label for="Ativo">Ativo</label>
+						<span class="has-error" th:if="${#fields.hasErrors('enabled')}" th:errors="*{enabled}">Enabled Error</span>
 						<select class="form-control"
 							required="true" th:field="*{enabled}" id="enabled">
 							<option value="true">true</option>
