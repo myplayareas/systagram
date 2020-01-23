@@ -12,7 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import br.ufc.great.sysadmin.model.Users;
+import br.ufc.great.sysadmin.domain.model.Users;
 import br.ufc.great.sysadmin.service.UsersService;
 
 @Component

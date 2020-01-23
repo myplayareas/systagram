@@ -1,4 +1,4 @@
-package br.ufc.great.sysadmin.model;
+package br.ufc.great.sysadmin.domain.model;
 
 import javax.persistence.Entity;
 

@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import br.ufc.great.sysadmin.model.Comment;
-import br.ufc.great.sysadmin.model.Person;
-import br.ufc.great.sysadmin.repository.ICommentRepository;
+import br.ufc.great.sysadmin.domain.repository.ICommentRepository;
+import br.ufc.great.sysadmin.domain.model.Comment;
+import br.ufc.great.sysadmin.domain.model.Person;
 
 @Service
 public class CommentService extends AbstractService<Comment, Long>{

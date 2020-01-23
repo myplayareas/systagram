@@ -8,9 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import br.ufc.great.sysadmin.model.Person;
-import br.ufc.great.sysadmin.model.Post;
-import br.ufc.great.sysadmin.model.Users;
+import br.ufc.great.sysadmin.domain.model.Person;
+import br.ufc.great.sysadmin.domain.model.Post;
+import br.ufc.great.sysadmin.domain.model.Users;
 import br.ufc.great.sysadmin.service.CommentService;
 import br.ufc.great.sysadmin.service.PictureService;
 import br.ufc.great.sysadmin.service.PostService;
