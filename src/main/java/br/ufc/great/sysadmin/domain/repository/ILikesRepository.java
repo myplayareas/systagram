@@ -1,12 +1,12 @@
-package br.ufc.great.sysadmin.repository;
+package br.ufc.great.sysadmin.domain.repository;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import br.ufc.great.sysadmin.model.Likes;
-import br.ufc.great.sysadmin.model.Person;
+import br.ufc.great.sysadmin.domain.model.Likes;
+import br.ufc.great.sysadmin.domain.model.Person;
 
 /**
  * Interface repositório de Likes baseada no JPARepository do Spring

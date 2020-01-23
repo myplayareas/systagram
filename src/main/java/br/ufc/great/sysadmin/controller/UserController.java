@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import br.ufc.great.sysadmin.model.Comment;
-import br.ufc.great.sysadmin.model.Person;
-import br.ufc.great.sysadmin.model.Picture;
-import br.ufc.great.sysadmin.model.Post;
-import br.ufc.great.sysadmin.model.Role;
-import br.ufc.great.sysadmin.model.Users;
+import br.ufc.great.sysadmin.domain.model.Comment;
+import br.ufc.great.sysadmin.domain.model.Person;
+import br.ufc.great.sysadmin.domain.model.Picture;
+import br.ufc.great.sysadmin.domain.model.Post;
+import br.ufc.great.sysadmin.domain.model.Role;
+import br.ufc.great.sysadmin.domain.model.Users;
 import br.ufc.great.sysadmin.service.AuthoritiesService;
 import br.ufc.great.sysadmin.service.PersonService;
 import br.ufc.great.sysadmin.service.UsersService;
