@@ -93,7 +93,7 @@ public class UserController {
       	
     	model.addAttribute("list", list);
 		
-		return "users/list";
+		return "users/listAllUsers";
 	}
 
 	/**
