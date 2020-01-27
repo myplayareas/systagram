@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import br.ufc.great.sysadmin.model.Comment;
-import br.ufc.great.sysadmin.model.Person;
-import br.ufc.great.sysadmin.model.Picture;
-import br.ufc.great.sysadmin.model.Post;
-import br.ufc.great.sysadmin.model.Role;
-import br.ufc.great.sysadmin.model.Users;
+import br.ufc.great.sysadmin.domain.model.Comment;
+import br.ufc.great.sysadmin.domain.model.Person;
+import br.ufc.great.sysadmin.domain.model.Picture;
+import br.ufc.great.sysadmin.domain.model.Post;
+import br.ufc.great.sysadmin.domain.model.Role;
+import br.ufc.great.sysadmin.domain.model.Users;
 import br.ufc.great.sysadmin.service.AuthoritiesService;
 import br.ufc.great.sysadmin.service.PersonService;
 import br.ufc.great.sysadmin.service.UsersService;
@@ -67,12 +67,22 @@ public class UserController {
 	}
 	
 	/**
-	 * Lista todos os usuarios cadastrados
+	 * Lista os usuarios da primeira pagina cadastrados 
 	 * @param model
 	 * @return pagina com todos os usuarios cadastrados
 	 */
 	@RequestMapping(value = "/users")
 	public String index(Model model){
+		return "redirect:/users/1";
+	}
+
+	/**
+	 * Lista todos os usuarios paginados cadastrados
+	 * @param model
+	 * @return pagina com todos os usuarios cadastrados
+	 */
+	@RequestMapping(value = "/users/all")
+	public String all(Model model){
     	List<Users> list = userService.getAll();
     	checkUser();
     	
@@ -83,9 +93,9 @@ public class UserController {
       	
     	model.addAttribute("list", list);
 		
-		return "users/list";
+		return "users/listAllUsers";
 	}
-	
+
 	/**
 	 * Faz a paginação da lista de usuários cadastrado
 	 * @param pageNumber
@@ -227,36 +237,51 @@ public class UserController {
     		return "users/form";
     	}
 
-    	/*
-    	 * Checa o tipo do usuário
-    	 * O usuário básico é o USER
-    	 */
-    	switch (authoritiesService.checkAuthority(authority)) {
-		case "USER":
-			roles.add(authoritiesService.getRoleByNome("USER"));
-			user.setRoles(roles);
-			break;
-		default:
-			ra.addFlashAttribute("errorFlash", "A permissão não está registrada no sistema!");
-			break;
+    	String username = user.getUsername();
+		String emailUser = user.getEmail();
+		Users userExists = this.userService.getUserByUserName(username);
+		Users emailExists = this.userService.getUserByEmail(emailUser);
+		
+		//TODO melhorar o tratamento de checagem de usuario e/ou e-mail existente 
+		if ((userExists != null) || (emailExists != null)) {			
+    		checkUser();
+            model.addAttribute("loginusername", loginUser.getUsername());
+        	model.addAttribute("loginemailuser", loginUser.getEmail());
+        	model.addAttribute("loginuserid", loginUser.getId());
+        	model.addAttribute("loginuser", loginUser);
+        	ra.addFlashAttribute("errorFlash", "Usuário " + username +  " ou conta de e-mail " +  emailUser+ " já existe!");
+        	return "redirect:/users";			
+		}else {
+			/*
+			 * Checa o tipo do usuário
+			 * O usuário básico é o USER
+			 */
+			switch (authoritiesService.checkAuthority(authority)) {
+			case "USER":
+				roles.add(authoritiesService.getRoleByNome("USER"));
+				user.setRoles(roles);
+				break;
+			default:
+				ra.addFlashAttribute("errorFlash", "A permissão não está registrada no sistema!");
+				break;
+			}
+
+			if (password.equals(confirmPassword)){
+				senhaCriptografada = new GeradorSenha().criptografa(password);
+				user.setPassword(senhaCriptografada);
+				//Criar uma pessoa vazia e associa ao novo usuário
+				Person person = new Person();
+				person.setUser(user);
+
+				user.setPerson(person);
+				Users save = userService.save(user);
+				ra.addFlashAttribute("successFlash", "Usuário foi salvo com sucesso.");
+			}else{
+				ra.addFlashAttribute("errorFlash", "A senha do usuário NÃO confere.");
+			}  
+
+			return "redirect:/users";
 		}
-    	    	
-    	if (password.equals(confirmPassword)){
-        	senhaCriptografada = new GeradorSenha().criptografa(password);
-        	user.setPassword(senhaCriptografada);
-        	//Criar uma pessoa vazia e associa ao novo usuário
-        	Person person = new Person();
-        	person.setUser(user);
-        	
-        	user.setPerson(person);
-            Users save = userService.save(user);
-            ra.addFlashAttribute("successFlash", "Usuário foi salvo com sucesso.");
-    	}else{
-            ra.addFlashAttribute("errorFlash", "A senha do usuário NÃO confere.");
-    	}  
-    	
-    	
-    	return "redirect:/users";
     }
     
     /**
@@ -418,10 +443,13 @@ public class UserController {
     		final RedirectAttributes ra) {
 		
 		String username = user.getUsername();
+		String emailUser = user.getEmail();
 		Users userExists = this.userService.getUserByUserName(username);
+		Users emailExists = this.userService.getUserByEmail(emailUser);
 		
-		if (userExists != null) {			
-			ra.addFlashAttribute("msgerro", "Usuário já existe!");
+		//TODO: melhorar o tratamento de checagem de usuário ou e-mail existente
+		if ((userExists != null) || (emailExists != null)) {			
+			ra.addFlashAttribute("msgerro", "Usuário ou e-mail já existe!");
 			return "redirect:/register";
 		}else {	
 			//checa a senha do usuário 			

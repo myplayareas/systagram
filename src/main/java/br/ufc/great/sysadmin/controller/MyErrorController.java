@@ -10,7 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import br.ufc.great.sysadmin.model.Users;
+import br.ufc.great.sysadmin.domain.model.Users;
 import br.ufc.great.sysadmin.util.MySessionInfo;
 
 @Controller

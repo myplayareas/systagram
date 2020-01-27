@@ -7,7 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import br.ufc.great.sysadmin.model.AbstractModel;
+import br.ufc.great.sysadmin.domain.model.AbstractModel;
 
 import java.io.Serializable;
 import java.util.List;

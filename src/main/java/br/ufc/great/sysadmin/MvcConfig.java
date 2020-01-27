@@ -36,7 +36,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     }
     
     /**
-     * Bean responsável por tratar as mensagens da aplicacao
+     * Bean responsável por tratar as mensagens do arquivo messages.properties da aplicacao
      * @return
      */
     @Bean
@@ -48,7 +48,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     }
     
     /**
-     * Bean que registra o local onde as mensagens da aplicacao ficam
+     * Bean que registra o local onde as mensagens do arquivo messages.properties da aplicacao ficam
      * @param messageSource
      * @return
      */

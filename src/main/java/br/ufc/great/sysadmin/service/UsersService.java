@@ -7,9 +7,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import br.ufc.great.sysadmin.model.Person;
-import br.ufc.great.sysadmin.model.Users;
-import br.ufc.great.sysadmin.repository.IUsersRepository;
+import br.ufc.great.sysadmin.domain.repository.IUsersRepository;
+import br.ufc.great.sysadmin.domain.model.Person;
+import br.ufc.great.sysadmin.domain.model.Users;
 
 /**
  * Classe de serviço para consumir o repositório de dados de Usuário

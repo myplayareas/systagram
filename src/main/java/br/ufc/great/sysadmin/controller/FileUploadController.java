@@ -9,19 +9,21 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import br.ufc.great.sysadmin.model.Person;
-import br.ufc.great.sysadmin.model.Picture;
-import br.ufc.great.sysadmin.model.Post;
-import br.ufc.great.sysadmin.model.Users;
+import br.ufc.great.sysadmin.domain.model.Person;
+import br.ufc.great.sysadmin.domain.model.Picture;
+import br.ufc.great.sysadmin.domain.model.Post;
+import br.ufc.great.sysadmin.domain.model.Users;
 import br.ufc.great.sysadmin.service.PersonService;
 import br.ufc.great.sysadmin.service.PictureService;
 import br.ufc.great.sysadmin.service.PostService;
@@ -65,6 +67,45 @@ public class FileUploadController {
 		return "uploads/uploadview";
 	}
 	
+	
+	/**
+	 * Faz a paginação da lista de fotos cadastradas
+	 * @param pageNumber
+	 * @param model
+	 * @return pagina contendo as fotos paginados pelo pageNumber
+	 */
+    @RequestMapping(value = "/upload/person/{id}/picture/{pageNumber}", method = RequestMethod.GET)
+    public String listAllPicturesByPage(@PathVariable Long id, @PathVariable Integer pageNumber, Model model, final RedirectAttributes ra) {
+		Person person = this.personService.get(id);
+		
+		if (person.getPictures().size() == 0) {
+			ra.addFlashAttribute("errorFlash", "Você precisa cadastrar pelo menos uma imagem!");
+			//redireciona para o formulário para adicionar uma nova foto
+			return "redirect:/person/" + id + "/select/picture"; 
+		}
+		
+		List<Picture> list = person.getPictures();
+		
+		checkUser();
+		
+		Page<Picture> page = this.pictureService.getList(pageNumber);
+    	
+        int current = page.getNumber() + 1;
+        int begin = Math.max(1, current - 5);
+        int end = Math.min(begin + 10, page.getTotalPages());
+
+        model.addAttribute("list", page);
+        model.addAttribute("beginIndex", begin);
+        model.addAttribute("endIndex", end);
+        model.addAttribute("currentIndex", current);
+        model.addAttribute("loginusername", loginUser.getUsername());
+    	model.addAttribute("loginemailuser", loginUser.getEmail());
+    	model.addAttribute("loginuserid", loginUser.getId());
+    	model.addAttribute("loginuser", loginUser);
+        
+    	return "/uploads/listAllPictures";
+    }
+
 	/**
 	 * Carrega a página contendo todas a fotos do usuário
 	 * @param id Id da pessoa
