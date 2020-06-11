@@ -1,6 +1,5 @@
 package br.ufc.great.sysadmin.controller;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 

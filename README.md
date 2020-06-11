@@ -46,8 +46,13 @@ $mvn test
 $mvn spring-boot:run
 ```
 9. Para os ambientes POSIX, é possível integrar todos esses comandos no seguinte pipe:
-```
+``` 
 $mvn clean && mvn test && mvn spring-boot:run
+```
+
+10. Para executar os testes de Architecture Checking
+```
+mvn -Dtest=CheckArchitecture test
 ```
 
 Por padrão a aplicação roda em http://localhost:8080/login
