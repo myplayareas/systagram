@@ -22,11 +22,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.ufc.great.sysadmin.domain.model.Person;
 import br.ufc.great.sysadmin.domain.model.Picture;
-import br.ufc.great.sysadmin.domain.model.Post;
 import br.ufc.great.sysadmin.domain.model.Users;
 import br.ufc.great.sysadmin.service.PersonService;
 import br.ufc.great.sysadmin.service.PictureService;
-import br.ufc.great.sysadmin.service.PostService;
 import br.ufc.great.sysadmin.service.UsersService;
 import br.ufc.great.sysadmin.util.Constantes;
 import br.ufc.great.sysadmin.util.ManipuladorDatas;

@@ -1,6 +1,9 @@
 package br.ufc.great.sysadmin.service;
 
 
+import java.io.Serializable;
+import java.util.List;
+
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -8,9 +11,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.ufc.great.sysadmin.domain.model.AbstractModel;
-
-import java.io.Serializable;
-import java.util.List;
 
 /**
  * Classe abstrata base para a criação dos serviços manipulação dos repositórios de dados da aplicação

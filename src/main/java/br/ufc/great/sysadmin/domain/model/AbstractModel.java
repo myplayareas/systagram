@@ -1,7 +1,12 @@
 package br.ufc.great.sysadmin.domain.model;
 
-import javax.persistence.*;
 import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 
 /**
  * Classe abstrata para servir de base para as classes de modelo
