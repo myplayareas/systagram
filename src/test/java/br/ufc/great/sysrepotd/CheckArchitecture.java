@@ -17,7 +17,18 @@ public class CheckArchitecture {
 	static JavaClasses importedClassesFromController = new ClassFileImporter().importPackages("br.ufc.great.sysadmin.controller");
 	static JavaClasses importedClassesFromService = new ClassFileImporter().importPackages("br.ufc.great.sysadmin.service");
 	static JavaClasses importedClassesFromRepository = new ClassFileImporter().importPackages("br.ufc.great.sysadmin.domain.repository");
-
+	
+	@Test
+	public void showImportedClasses() {		
+		String splitClasses[] = this.importedClasses.toString().split(",");
+		
+		System.out.println("Lista de classes importadas: " + splitClasses.length);
+		
+		for (String element : splitClasses) {
+			System.out.println(element);
+		}
+	}
+	
 	@Test
 	public void Controllers_haveSimpleNameEndingWithController() {
 		ArchRule rule = classes()
