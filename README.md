@@ -1,7 +1,7 @@
 # SysTagram
 Aplicação para postar fotos e receber comentários e likes. 
 
-![License](https://img.shields.io/badge/License-BSD%202--Clause-orange.svg) 
+[![License](https://img.shields.io/badge/License-BSD%202--Clause-orange.svg)](https://github.com/topicos-sistemas-distribuidos/systagram/blob/master/LICENSE)
 
 Features
 ---
